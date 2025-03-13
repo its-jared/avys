@@ -1,0 +1,9 @@
+[package]
+name = "avys"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.15.3"
+bevy_flycam = "0.15.0"
+bracket-noise = "0.8.7"
