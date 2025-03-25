@@ -37,7 +37,7 @@ fn setup_ui(
     let font = TextFont {
         font: asset_server.load("m5x7.ttf"),
         font_size: 25.0,
-        font_smoothing: FontSmoothing::None,
+        font_smoothing: FontSmoothing::AntiAliased,
     };
 
     commands

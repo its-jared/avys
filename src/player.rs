@@ -1,10 +1,9 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
-pub struct Player(pub Vec3);
+use crate::personality::{Health, Mood};
 
 #[derive(Component)]
-pub struct Health(pub f32);
+pub struct Player(pub Vec3);
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -14,16 +13,23 @@ impl Plugin for PlayerPlugin {
     }
 }
 
-fn setup_player(mut commands: Commands) {
+fn setup_player(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     commands.spawn((
         Transform::from_xyz(0.0, 0.0, 0.0),
         Sprite {
             color: Color::srgb(1.0, 0.0, 1.0),
-            custom_size: Some(Vec2::new(16.0, 16.0)),
+            custom_size: Some(Vec2::new(16.0, 32.0)),
             ..Default::default()
         },
         Player(Vec3::new(1.0, 0.0, 1.0)),
-        Health(10.0),
+        Health {
+            max: 20.0,
+            val: 20.0
+        },
+        Mood::Happy,
     ));
 
     commands.spawn((
@@ -35,7 +41,7 @@ fn setup_player(mut commands: Commands) {
     commands.spawn((
         Transform::from_xyz(10.0, 10.0, 0.0),
         Sprite {
-            color: Color::srgb(0.0, 1.0, 1.0),
+            image: asset_server.load("grass.png"),
             custom_size: Some(Vec2::new(32.0, 32.0)),
             ..Default::default()
         },

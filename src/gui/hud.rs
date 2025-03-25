@@ -1,15 +1,21 @@
 use bevy::{prelude::*, text::FontSmoothing};
 
-use crate::player::{Health, Player};
+use crate::{personality::{Health, Mood}, player::Player};
 
 #[derive(Component)]
 pub struct PlayerHealthLabel;
+
+#[derive(Component)]
+pub struct PlayerMoodLabel;
 
 pub struct HUDPlugin;
 impl Plugin for HUDPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_hud);
-        app.add_systems(Update, update_health_label);
+        app.add_systems(Update, (
+            update_health_label,
+            update_mood_label
+        ));
     }
 }
 
@@ -40,10 +46,17 @@ fn setup_hud(
         .insert(PickingBehavior::IGNORE)
         .with_children(|parent| {
             parent.spawn((
-                Text::from("HP: N/A"),
+                Text::from("HP N/A"),
                 font.clone(), 
                 TextColor::from(Color::srgb(1.0, 0.0, 0.0)),
                 PlayerHealthLabel,
+            ));
+
+            parent.spawn((
+                Text::from("Mood N/A"),
+                font.clone(), 
+                TextColor::from(Color::srgb(0.0, 1.0, 0.0)),
+                PlayerMoodLabel,
             ));
         });
 }
@@ -55,5 +68,15 @@ fn update_health_label(
     let mut health_label = health_label_q.single_mut();
     let player_health = player_q.single().1;
 
-    health_label.0 = format!("HP: {}", player_health.0);
+    health_label.0 = format!("{}/{}", player_health.val, player_health.max);
+}
+
+fn update_mood_label(
+    mut mood_label_q: Query<&mut Text, With<PlayerMoodLabel>>,
+    player_q: Query<(&Player, &Mood), Without<PlayerMoodLabel>>,
+) {
+    let mut mood_label = mood_label_q.single_mut();
+    let player_mood = player_q.single().1;
+
+    mood_label.0 = format!("{}", player_mood);
 }

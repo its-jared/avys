@@ -5,6 +5,7 @@ pub mod game;
 pub mod player;
 
 pub mod gui;
+pub mod personality;
 
 fn main() {
     App::new()
