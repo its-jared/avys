@@ -21,9 +21,6 @@ fn main() {
                         ..default()
                     })
                     .set(ImagePlugin::default_nearest()),
-                
-                PlayerPlugin,
-                GamePlugin,
             )
         )
         .insert_resource(ClearColor(Color::WHITE))
