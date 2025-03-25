@@ -1,10 +1,10 @@
-use bevy::prelude::*;
-use bevy_flycam::PlayerPlugin;
+use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
 use game::GamePlugin;
 
 pub mod game;
 pub mod player;
-pub mod world;
+
+pub mod gui;
 
 fn main() {
     App::new()
@@ -21,8 +21,12 @@ fn main() {
                         ..default()
                     })
                     .set(ImagePlugin::default_nearest()),
+                
+                FrameTimeDiagnosticsPlugin::default(),
+
+                GamePlugin
             )
         )
-        .insert_resource(ClearColor(Color::WHITE))
+        .insert_resource(ClearColor(Color::BLACK))
         .run();
 }
