@@ -1,19 +1,24 @@
 use bevy::prelude::*;
 use std::fmt::Display;
 
+pub mod personality_manager;
+
 #[derive(Component)]
 pub struct Health {
     pub max: f32,
     pub val: f32,
 }
 
-#[derive(Component)]
+#[derive(Clone, Copy)]
 pub enum Mood {
     Happy,
     Sad,
     Neutral,
     Angry,
 }
+
+#[derive(Component)]
+pub struct MoodComponent(pub Mood);
 
 impl Display for Mood {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -33,7 +38,7 @@ pub struct Mob;
 pub struct MobBundle {
     pub mob: Mob,
     pub health: Health,
-    pub mood: Mood,
+    pub mood: MoodComponent,
     pub transform: Transform,
     pub sprite: Sprite,
 }
@@ -46,7 +51,7 @@ impl Default for MobBundle {
                 max: 20.0,
                 val: 20.0,
             },
-            mood: Mood::Neutral,
+            mood: MoodComponent(Mood::Neutral),
             transform: Transform::from_xyz(0.0, 0.0, 1.0),
             sprite: Sprite {
                 color: Color::srgb(1.0, 0.0, 0.0),

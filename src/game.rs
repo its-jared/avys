@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{gui::{debug::DebugGUIPlugin, hud::HUDPlugin}, player::PlayerPlugin, world::WorldPlugin};
+use crate::{gui::{debug::DebugGUIPlugin, hud::HUDPlugin}, personality::personality_manager::PersonalityManagerPlugin, player::PlayerPlugin, world::WorldPlugin};
 
 pub struct GamePlugin;
 impl Plugin for GamePlugin {
@@ -9,6 +9,7 @@ impl Plugin for GamePlugin {
             DebugGUIPlugin,
             HUDPlugin,
             WorldPlugin,
+            PersonalityManagerPlugin,
         ));
     }
 }

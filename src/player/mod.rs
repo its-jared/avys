@@ -1,9 +1,11 @@
 use bevy::prelude::*;
 use std::fmt;
-use crate::{personality::{Health, Mood}, player::movement::*};
+use crate::{personality::{Health, Mood, MoodComponent}, player::controls::*};
 use crate::world::{TILE_SIZE, world_to_global_pos};
 
-pub mod movement;
+pub mod controls;
+pub mod player_commands;
+pub mod highlight;
 
 pub const WALKING_SPEED: f32 = 150.0;
 pub const RUNNING_SPEED: f32 = 200.0;
@@ -73,7 +75,7 @@ fn setup_player(mut commands: Commands) {
             max: 20.0,
             val: 20.0
         },
-        Mood::Happy,
+        MoodComponent(Mood::Happy),
     ));
 
     commands.spawn((

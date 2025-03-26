@@ -1,6 +1,6 @@
 use bevy::{prelude::*, text::FontSmoothing};
 
-use crate::{personality::{Health, Mood}, player::Player};
+use crate::{personality::{Health, MoodComponent}, player::Player};
 
 #[derive(Component)]
 pub struct PlayerHealthLabel;
@@ -73,10 +73,10 @@ fn update_health_label(
 
 fn update_mood_label(
     mut mood_label_q: Query<&mut Text, With<PlayerMoodLabel>>,
-    player_q: Query<(&Player, &Mood), Without<PlayerMoodLabel>>,
+    player_q: Query<(&Player, &MoodComponent), Without<PlayerMoodLabel>>,
 ) {
     let mut mood_label = mood_label_q.single_mut();
-    let player_mood = player_q.single().1;
+    let player_mood = player_q.single().1.0;
 
     mood_label.0 = format!("{}", player_mood);
 }

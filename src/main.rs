@@ -23,12 +23,10 @@ fn main() {
                         ..default()
                     })
                     .set(ImagePlugin::default_nearest()),
-                
                 FrameTimeDiagnosticsPlugin::default(),
-
                 GamePlugin
             )
         )
-        .insert_resource(ClearColor(Color::srgb_u8(33, 118, 255)))
+        .insert_resource(ClearColor(Color::NONE))
         .run();
 }
