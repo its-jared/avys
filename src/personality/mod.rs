@@ -47,7 +47,7 @@ impl Default for MobBundle {
                 val: 20.0,
             },
             mood: Mood::Neutral,
-            transform: Transform::from_xyz(0.0, 0.0, 0.0),
+            transform: Transform::from_xyz(0.0, 0.0, 1.0),
             sprite: Sprite {
                 color: Color::srgb(1.0, 0.0, 0.0),
                 custom_size: Some(Vec2::new(32.0, 32.0)),

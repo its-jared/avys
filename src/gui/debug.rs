@@ -18,6 +18,9 @@ pub struct PlayerPosLabel;
 #[derive(Component)]
 pub struct DeltaLabel;
 
+#[derive(Component)]
+pub struct MoveDirLabel;
+
 pub struct DebugGUIPlugin;
 impl Plugin for DebugGUIPlugin {
     fn build(&self, app: &mut App) {
@@ -26,6 +29,7 @@ impl Plugin for DebugGUIPlugin {
             update_fps_label,
             update_pos_label,
             update_delta_label,
+            update_move_dir_label,
         ));
     }
 }
@@ -73,6 +77,12 @@ fn setup_ui(
                 font.clone(), 
                 DeltaLabel,
             ));
+
+            parent.spawn((
+                Text::new("Move Dir"),
+                font.clone(), 
+                MoveDirLabel,
+            ));
         });
 }
 
@@ -110,4 +120,17 @@ fn update_delta_label(
 ) {
     let mut delta_label = delta_label_q.single_mut();
     delta_label.0 = format!("Delta: {}", time.delta_secs());
+}
+
+fn update_move_dir_label(
+    mut pos_label_q: Query<&mut Text, With<MoveDirLabel>>,
+    player_q: Query<&Player, Without<MoveDirLabel>>,
+) {
+    let mut pos_label = pos_label_q.single_mut();
+    let move_dir = player_q.single().0;
+
+    pos_label.0 
+        = format!("Move Dir: {}, {}",
+        move_dir.x,
+        move_dir.y);
 }
