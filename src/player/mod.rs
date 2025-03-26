@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use highlight::{spawn_highlight, update_highlight};
 use std::fmt;
 use crate::{personality::{Health, Mood, MoodComponent}, player::controls::*};
 use crate::world::{TILE_SIZE, world_to_global_pos};
@@ -44,10 +45,14 @@ pub struct PlayerComponent {
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_player);
+        app.add_systems(Startup, (
+            setup_player,
+            spawn_highlight,
+        ));
         app.add_systems(FixedUpdate, (
             keyboard_controls,
             gamepad_controls,
+            update_highlight,
         ));
     }
 }
@@ -62,7 +67,7 @@ fn setup_player(mut commands: Commands) {
     commands.spawn((
         Transform::from_xyz(center.x, center.y, 1.0),
         Sprite {
-            color: Color::srgb(1.0, 0.0, 1.0),
+            color: Color::srgb(1.0, 0.0, 0.0),
             custom_size: Some(Vec2::new(16.0, 32.0)),
             ..Default::default()
         },

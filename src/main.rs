@@ -27,6 +27,6 @@ fn main() {
                 GamePlugin
             )
         )
-        .insert_resource(ClearColor(Color::NONE))
+        .insert_resource(ClearColor(Color::srgb(0.0, 0.0, 0.8)))
         .run();
 }

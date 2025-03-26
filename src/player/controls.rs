@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use bevy::{input::gamepad::{GamepadRumbleIntensity, GamepadRumbleRequest}, prelude::*};
-use crate::world::{global_to_world_pos, WORLD_SIZE};
+use crate::world::{global_to_world_pos, world_commands::WorldCommands, WORLD_SIZE};
 
 use super::{player_commands::PlayerCommands, *};
 
@@ -141,12 +141,12 @@ pub fn gamepad_controls(
         }
 
         if gamepad.1.just_pressed(GamepadButton::RightTrigger2) {
-            commands.damage_player(0.5);
+            commands.place_crop();
 
             evw_rumble.send(GamepadRumbleRequest::Add {
                 gamepad: gamepad.0,
-                duration: Duration::from_millis(100),
-                intensity: GamepadRumbleIntensity::MAX,
+                duration: Duration::from_millis(50),
+                intensity: GamepadRumbleIntensity::WEAK_MAX,
             });        
         }
 

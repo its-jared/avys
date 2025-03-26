@@ -2,9 +2,10 @@ use bevy::prelude::*;
 use build::build_world;
 
 pub mod build;
+pub mod world_commands;
 
 pub const WORLD_SIZE: usize = 32;
-pub const TILE_SIZE: usize = 16;
+pub const TILE_SIZE: usize = 32;
 
 #[derive(Component)]
 pub struct WorldTile(pub Vec2);
@@ -28,6 +29,6 @@ pub fn world_to_global_pos(pos: Vec3) -> Vec3 {
 pub struct WorldPlugin;
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
-        //app.add_systems(Startup, build_world);
+        app.add_systems(Startup, build_world);
     }
 }
