@@ -19,7 +19,10 @@ pub struct PlayerPosLabel;
 pub struct DeltaLabel;
 
 #[derive(Component)]
-pub struct MoveDirLabel;
+pub struct FacingLabel;
+
+#[derive(Component)]
+pub struct RunningLabel;
 
 pub struct DebugGUIPlugin;
 impl Plugin for DebugGUIPlugin {
@@ -29,7 +32,8 @@ impl Plugin for DebugGUIPlugin {
             update_fps_label,
             update_pos_label,
             update_delta_label,
-            update_move_dir_label,
+            update_facing_label,
+            update_running_label,
         ));
     }
 }
@@ -79,9 +83,15 @@ fn setup_ui(
             ));
 
             parent.spawn((
-                Text::new("Move Dir"),
+                Text::new("Facing"),
                 font.clone(), 
-                MoveDirLabel,
+                FacingLabel,
+            ));
+
+            parent.spawn((
+                Text::new("Running"),
+                font.clone(), 
+                RunningLabel,
             ));
         });
 }
@@ -103,15 +113,15 @@ fn update_fps_label(
 
 fn update_pos_label(
     mut pos_label_q: Query<&mut Text, With<PlayerPosLabel>>,
-    player_q: Query<(&Player, &Transform), Without<PlayerPosLabel>>,
+    player_q: Query<&Player, Without<PlayerPosLabel>>,
 ) {
     let mut pos_label = pos_label_q.single_mut();
-    let player_pos = player_q.single().1.translation;
+    let player = player_q.single();
 
     pos_label.0 
         = format!("POS: {}, {}",
-        player_pos.x.floor(),
-        player_pos.y.floor());
+        player.pos.x,
+        player.pos.y);
 }
 
 fn update_delta_label(
@@ -122,15 +132,24 @@ fn update_delta_label(
     delta_label.0 = format!("Delta: {}", time.delta_secs());
 }
 
-fn update_move_dir_label(
-    mut pos_label_q: Query<&mut Text, With<MoveDirLabel>>,
-    player_q: Query<&Player, Without<MoveDirLabel>>,
+fn update_facing_label(
+    mut facing_label_q: Query<&mut Text, With<FacingLabel>>,
+    player_q: Query<&Player, Without<FacingLabel>>,
 ) {
-    let mut pos_label = pos_label_q.single_mut();
-    let move_dir = player_q.single().0;
+    let mut facing_label = facing_label_q.single_mut();
+    let player = player_q.single();
 
-    pos_label.0 
-        = format!("Move Dir: {}, {}",
-        move_dir.x,
-        move_dir.y);
+    facing_label.0 
+        = format!("Facing: {}", player.facing);
+}
+
+fn update_running_label(
+    mut running_label_q: Query<&mut Text, With<RunningLabel>>,
+    player_q: Query<&Player, Without<RunningLabel>>,
+) {
+    let mut running_label = running_label_q.single_mut();
+    let running = player_q.single().running;
+
+    running_label.0 
+        = format!("Running: {}", running);
 }

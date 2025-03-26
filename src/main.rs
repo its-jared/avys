@@ -3,6 +3,7 @@ use game::GamePlugin;
 
 pub mod game;
 pub mod player;
+pub mod world;
 
 pub mod gui;
 pub mod personality;
@@ -28,6 +29,6 @@ fn main() {
                 GamePlugin
             )
         )
-        .insert_resource(ClearColor(Color::BLACK))
+        .insert_resource(ClearColor(Color::srgb_u8(33, 118, 255)))
         .run();
 }
