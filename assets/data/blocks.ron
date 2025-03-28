@@ -1,0 +1,28 @@
+(
+    [
+        (
+            id: 0,
+            name: "Empty",
+            desc: "Devoid of life.",
+            img_path: "textures/missing.png",
+            alpha: 0.0,
+            solid: false
+        ),
+        (
+            id: 1,
+            name: "Moss",
+            desc: "Soft and smelly.",
+            img_path: "textures/moss.png",
+            alpha: 1.0,
+            solid: false
+        ),
+        (
+            id: 2,
+            name: "Rock",
+            desc: "Tough, perfect for tools.",
+            img_path: "textures/rock.png",
+            alpha: 1.0,
+            solid: true
+        ),
+    ]
+)

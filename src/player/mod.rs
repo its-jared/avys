@@ -1,11 +1,10 @@
 use bevy::prelude::*;
-use highlight::{spawn_highlight, update_highlight};
+use highlight::{spawn_highlight, update_highlight, HighlightPos};
 use std::fmt;
-use crate::{personality::{Health, Mood, MoodComponent}, player::controls::*};
+use crate::player::controls::*;
 use crate::world::{TILE_SIZE, world_to_global_pos};
 
 pub mod controls;
-pub mod player_commands;
 pub mod highlight;
 
 pub const WALKING_SPEED: f32 = 150.0;
@@ -53,7 +52,7 @@ impl Plugin for PlayerPlugin {
             keyboard_controls,
             gamepad_controls,
             update_highlight,
-        ));
+        ).run_if(resource_exists::<HighlightPos>));
     }
 }
 
@@ -76,11 +75,6 @@ fn setup_player(mut commands: Commands) {
             facing: Face::North,
             running: false,
         },
-        Health {
-            max: 20.0,
-            val: 20.0
-        },
-        MoodComponent(Mood::Happy),
     ));
 
     commands.spawn((

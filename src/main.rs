@@ -4,9 +4,9 @@ use game::GamePlugin;
 pub mod game;
 pub mod player;
 pub mod world;
+pub mod data;
 
 pub mod gui;
-pub mod personality;
 
 fn main() {
     App::new()

@@ -24,6 +24,9 @@ pub struct FacingLabel;
 #[derive(Component)]
 pub struct RunningLabel;
 
+#[derive(Component)]
+pub struct TimeLabel;
+
 pub struct DebugGUIPlugin;
 impl Plugin for DebugGUIPlugin {
     fn build(&self, app: &mut App) {
@@ -34,6 +37,7 @@ impl Plugin for DebugGUIPlugin {
             update_delta_label,
             update_facing_label,
             update_running_label,
+            update_time_label,
         ));
     }
 }
@@ -92,6 +96,12 @@ fn setup_ui(
                 Text::new("Running"),
                 font.clone(), 
                 RunningLabel,
+            ));
+
+            parent.spawn((
+                Text::new("Time"),
+                font.clone(), 
+                TimeLabel,
             ));
         });
 }
@@ -152,4 +162,12 @@ fn update_running_label(
 
     running_label.0 
         = format!("Running: {}", running);
+}
+
+fn update_time_label(
+    mut time_label_q: Query<&mut Text, With<TimeLabel>>,
+    time: Res<Time>,
+) {
+    let mut time_label = time_label_q.single_mut();
+    time_label.0 = format!("Time: {}", time.elapsed_secs().floor());
 }

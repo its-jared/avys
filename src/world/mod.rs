@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use build::build_world;
 
+use crate::data::BlockResource;
+
 pub mod build;
 pub mod world_commands;
 
@@ -29,6 +31,7 @@ pub fn world_to_global_pos(pos: Vec3) -> Vec3 {
 pub struct WorldPlugin;
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, build_world);
+        app.add_systems(PostStartup, build_world
+            .run_if(resource_exists::<BlockResource>));
     }
 }

@@ -3,7 +3,7 @@ use std::time::Duration;
 use bevy::{input::gamepad::{GamepadRumbleIntensity, GamepadRumbleRequest}, prelude::*};
 use crate::world::{global_to_world_pos, world_commands::WorldCommands, WORLD_SIZE};
 
-use super::{player_commands::PlayerCommands, *};
+use super::*;
 
 fn move_player(
     mut player: (Mut<'_, Player>, Mut<'_, Transform>),
@@ -42,6 +42,7 @@ pub fn keyboard_controls(
     mut commands: Commands,
     mut player_q: Query<(&mut Player, &mut Transform)>,
     mut camera_q: Query<(&Camera2d, &mut Transform), Without<Player>>,
+    highlight_pos: Res<HighlightPos>,
     keys: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
@@ -71,8 +72,9 @@ pub fn keyboard_controls(
         player.0.running = !player.0.running;
     }
 
+    // this binding is to be changed. 
     if keys.just_pressed(KeyCode::KeyZ) {
-        commands.damage_player(0.5);
+        commands.set_block(1, highlight_pos.0);
     }
 
     move_player(player, cam_transform, move_dir, time.delta_secs());
@@ -86,6 +88,7 @@ pub fn gamepad_controls(
     mut player_q: Query<(&mut Player, &mut Transform)>,
     mut camera_q: Query<(&Camera2d, &mut Transform), Without<Player>>,
     mut evw_rumble: EventWriter<GamepadRumbleRequest>,
+    highlight_pos: Res<HighlightPos>,
     gamepad_q:  Query<(Entity, &Gamepad)>,
 ) {
     for gamepad in &gamepad_q {   
@@ -141,7 +144,7 @@ pub fn gamepad_controls(
         }
 
         if gamepad.1.just_pressed(GamepadButton::RightTrigger2) {
-            commands.place_crop();
+            commands.set_block(1, highlight_pos.0);
 
             evw_rumble.send(GamepadRumbleRequest::Add {
                 gamepad: gamepad.0,
