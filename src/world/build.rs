@@ -16,7 +16,7 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
     
     let texture_handle: Handle<Image> = asset_server.load("textures/tiles.png");
 
-    let map_size = TilemapSize { x: 32, y: 32 };
+    let map_size = TilemapSize { x: 100, y: 100 };
 
     // Create a tilemap entity a little early.
     // We want this entity early because we need to tell each tile which tilemap entity
@@ -38,15 +38,17 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
             let tile_pos = TilePos { x, y };
             let mod_val = noise.get_noise(x as f32 / 50., y as f32 / 500.) * 5.;
             let val = noise.get_noise(x as f32 / 100. * mod_val, y as f32 / 100. * mod_val) * 2.;
+            let mut id = 0; 
 
             if val >= 0.0 {
-                
+                id = 1;
             }
 
             let tile_entity = commands
                 .spawn(TileBundle {
                     position: tile_pos,
                     tilemap_id: TilemapId(tilemap_entity),
+                    texture_index: TileTextureIndex(id),
                     ..Default::default()
                 })
                 .id();
@@ -54,7 +56,7 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
         }
     }
 
-    let tile_size = TilemapTileSize { x: 32.0, y: 32.0 };
+    let tile_size = TilemapTileSize { x: 16.0, y: 16.0 };
     let grid_size = tile_size.into();
     let map_type = TilemapType::default();
 
@@ -65,7 +67,7 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
         storage: tile_storage,
         texture: TilemapTexture::Single(texture_handle),
         tile_size,
-        transform: get_tilemap_center_transform(&map_size, &grid_size, &map_type, 0.0),
+        transform: Transform::from_scale(Vec3::splat(2.)),
         ..Default::default()
     });
 }
