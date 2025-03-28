@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.15.3"
+bevy_ecs_tilemap = "0.15.0"
 bracket-noise = "0.8.7"
 ron = "0.9.0"
 serde = {version = "1.0.219", features = ["derive"]}

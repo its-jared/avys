@@ -1,4 +1,5 @@
 use bevy::{diagnostic::FrameTimeDiagnosticsPlugin, prelude::*};
+use bevy_ecs_tilemap::TilemapPlugin;
 use game::GamePlugin;
 
 pub mod game;
@@ -24,6 +25,7 @@ fn main() {
                     })
                     .set(ImagePlugin::default_nearest()),
                 FrameTimeDiagnosticsPlugin::default(),
+                TilemapPlugin,
                 GamePlugin
             )
         )
