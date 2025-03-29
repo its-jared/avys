@@ -14,7 +14,7 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
     noise.set_fractal_lacunarity(1.0);
     noise.set_frequency(2.0);
     
-    let texture_handle: Handle<Image> = asset_server.load("textures/tiles.png");
+    let texture_handle: Handle<Image> = asset_server.load("textures/tilesheet.png");
 
     let map_size = TilemapSize { x: 100, y: 100 };
 
@@ -40,7 +40,9 @@ pub fn build_world(mut commands: Commands, asset_server: Res<AssetServer>) {
             let val = noise.get_noise(x as f32 / 100. * mod_val, y as f32 / 100. * mod_val) * 2.;
             let mut id = 0; 
 
-            if val >= 0.0 {
+            if val >= 0.5 {
+                id = 2;
+            } else if val >= 0.0 {
                 id = 1;
             }
 
