@@ -1,0 +1,8 @@
+Goal: Destroy the Avys chrystal - found in a pocket dimension accessable through either
+a temple or some craftable portal. The Avys chrystal will provide some type of "corruption"
+effect on the world and when destroyed will stop the spread of this virus. 
+
+Ideas:
+    - The further you leave spawn (0,0) the biomes would become increasingly difficult.
+        This can be convayed through the use of having alternate "Avys" effected biomes. 
+    - As you play through more nights, more dangerous mobs will spawn.

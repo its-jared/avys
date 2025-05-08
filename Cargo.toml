@@ -1,0 +1,10 @@
+[package]
+name = "avys"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bevy = "0.16.0"
+bracket-noise = "0.8.7"
+ron = "0.10.1"
+serde = "1.0.219"
