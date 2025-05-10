@@ -1,0 +1,29 @@
+BlockRegistery(
+    blocks: [
+        Block(
+            name: "Moss",
+            id: 0,
+            texture: "moss",
+        ),
+        Block(
+            name: "Flowering Moss",
+            id: 1,
+            texture: "flowering_moss",
+        ),
+        Block(
+            name: "Basalt",
+            id: 2,
+            texture: "basalt",
+        ),
+        Block(
+            name: "Ember Infused Basalt",
+            id: 3,
+            texture: "ember_infused_basalt",
+        ),
+        Block(
+            name: "Basalt Wall",
+            id: 4,
+            texture: "basalt_wall",
+        ),
+    ]
+)

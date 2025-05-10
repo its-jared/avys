@@ -1,9 +1,7 @@
-use std::collections::HashMap;
 use bevy::prelude::*;
 use bracket_noise::prelude::*;
-use crate::level::biome;
-
-use super::{biome::BiomeRegistery, infinite::ChunkStore};
+use crate::level::{biomes::biome, block::BlockRegistery};
+use super::infinite::ChunkStore;
 
 pub const CHUNK_SIZE: f32 = 16.0;
 pub const TILE_SIZE: f32 = 32.0;
@@ -11,7 +9,7 @@ pub const TILE_SIZE: f32 = 32.0;
 #[derive(Component)]
 pub struct Chunk;
 
-fn build_world(mut cmds: Commands) {
+pub fn build_world(mut cmds: Commands) {
     cmds.queue(BuildChunk(IVec2::new(-1, -1)));
     cmds.queue(BuildChunk(IVec2::new(-1, 0)));
     cmds.queue(BuildChunk(IVec2::new(-1, 1)));
@@ -40,6 +38,14 @@ impl Command for BuildChunk {
 
         info!("Building chunk at {}", self.0);
 
+        let block_registery = &world
+            .get_resource_mut::<BlockRegistery>()
+            .expect("Waiting for Block Registery")
+            .blocks
+            .clone();
+        let asset_server = world.get_resource::<AssetServer>().unwrap().clone();
+        let biomes = biome::set_registery();
+
         let chunk_entity = world.spawn((
             Transform::from_xyz(
                 (self.0.x as f32 * TILE_SIZE) * CHUNK_SIZE, 
@@ -48,23 +54,34 @@ impl Command for BuildChunk {
             ),
             Chunk,
         )).id();
-    
-        let biome_registery = *world
-            .get_resource::<BiomeRegistery>()
-            .expect("Waiting for Biome Registery");
-    
+
+        let mut noise = FastNoise::seeded(10);
+        noise.set_noise_type(NoiseType::Cubic);
+        noise.set_frequency(0.005);
+
         for y in 0..50 {
             for x in 0..50 {
-                let biome = biome::get_biome(
-                    IVec2::new(
-                        ((x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
-                        ((y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
-                    ),
-                    biome_registery.0
+                let nb = noise.get_noise(
+                    (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE,
+                    (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE,
                 );
+                let mut biome = &biomes.biomes[0];
+
+                if nb >= 0.0 { biome = &biomes.biomes[1]; }
+
+                let block = biome.get_block(IVec2 {
+                    x: ((x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
+                    y: ((y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
+                });
 
                 let tile = world.spawn((
-                    Sprite::from_color(Color::srgb(biome.ground_color.0, biome.ground_color.1, biome.ground_color.2), Vec2::new(TILE_SIZE, TILE_SIZE)),
+                    Sprite {
+                        image: asset_server.load(
+                            format!("textures/{}.png", block_registery[block].texture),
+                        ),
+                        custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
+                        ..default()
+                    },
                     Transform::from_xyz(
                         (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
                         (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
@@ -75,26 +92,5 @@ impl Command for BuildChunk {
                 world.entity_mut(chunk_entity).add_child(tile);
             }
         }
-    }
-}
-
-pub struct LevelBuilderPlugin;
-
-impl Plugin for LevelBuilderPlugin {
-    fn build(&self, app: &mut App) {
-        app
-            .insert_resource(ChunkStore(HashMap::new()))
-
-            .add_systems(
-                Startup, 
-                build_world
-                    .run_if(resource_exists::<ChunkStore>)
-                    .run_if(resource_exists::<BiomeRegistery>)
-            );
-            /*.add_systems(
-                Update,
-                super::infinite::manage_chunks
-                    .run_if(resource_exists::<ChunkStore>)
-            );*/
     }
 }

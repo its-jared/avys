@@ -1,32 +1,52 @@
-(
-    Biome(
-        name: "Moss Garden",
-        id: 0,
+BiomeRegistery(
+    biomes: [
+        Biome(
+            name: "Moss Garden",
+            id: 0,
 
-        moisture_range: (0.0, 1.0), 
-        temperature_range: (-0.5, 0.5),
-        height_range: (-1.0, 1.0),
+            moisture_range: (-0.5, 1.0), 
+            temperature_range: (-1.0, 1.0),
+            height_range: (-1.0, 1.0),
 
-        ground_color: (0.0, 1.0, 0.0),
-    ),
-    Biome(
-        name: "Desert",
-        id: 1,
+            ground_block: 0,
+            wall_block: 0,
+            decor: [
+                BiomeDecor(
+                    name: "Flowering Moss",
+                    id: 2,
+                    chance: 50,
+                ),
+            ],
+        ),
+        Biome(
+            name: "Desert",
+            id: 1,
 
-        moisture_range: (-1.0, 0.0), 
-        temperature_range: (0.0, 1.0),
-        height_range: (0.0, 1.0),
+            moisture_range: (-1.0, 0.0), 
+            temperature_range: (0.5, 1.0),
+            height_range: (0.0, 1.0),
 
-        ground_color: (0.0, 1.0, 1.0),
-    ),
-    Biome(
-        name: "Basalt Stripes",
-        id: 2,
+            ground_block: 2,
+            wall_block: 2,
+            decor: [],
+        ),
+        Biome(
+            name: "Basalt Stripes",
+            id: 2,
 
-        moisture_range: (-0.5, 0.5), 
-        temperature_range: (0.0, 1.0),
-        height_range: (0.5, 1.0),
+            moisture_range: (-0.5, 0.5), 
+            temperature_range: (0.0, 1.0),
+            height_range: (0.5, 1.0),
 
-        ground_color: (0.5, 0.5, 0.5),
-    ),
+            ground_block: 2,
+            wall_block: 4,
+            decor: [
+                BiomeDecor(
+                    name: "Ember Infused Basalt",
+                    id: 3,
+                    chance: 20,
+                ),
+            ],
+        ),
+    ] 
 )

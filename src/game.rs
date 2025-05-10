@@ -18,8 +18,7 @@ impl Plugin for GamePlugin {
 
             .add_plugins((
                 player::PlayerPlugin,
-                level::biome::BiomePlugin,
-                level::build::LevelBuilderPlugin,
+                level::LevelBuilderPlugin,
             ));
     }
 }
