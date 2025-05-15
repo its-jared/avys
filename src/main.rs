@@ -1,7 +1,8 @@
 use bevy::prelude::*;
+use bevy_inspector_egui::{bevy_egui::EguiPlugin, quick::WorldInspectorPlugin};
 
-pub mod game;
 use game::GamePlugin;
+pub mod game;
 
 pub mod player;
 pub mod level;
@@ -24,5 +25,7 @@ fn main() {
 
             GamePlugin
         ))
+        .add_plugins(EguiPlugin { enable_multipass_for_primary_context: true })
+        .add_plugins(WorldInspectorPlugin::new())
         .run();
 }

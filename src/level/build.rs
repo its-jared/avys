@@ -1,13 +1,16 @@
+use std::collections::HashMap;
+
 use bevy::prelude::*;
 use bracket_noise::prelude::*;
+use rand::Rng;
 use crate::level::{biomes::biome, block::BlockRegistery};
-use super::infinite::ChunkStore;
+use super::{biomes::biome::BiomeRegistery, infinite::ChunkStore};
 
 pub const CHUNK_SIZE: f32 = 16.0;
-pub const TILE_SIZE: f32 = 32.0;
+pub const TILE_SIZE: f32 = 64.0;
 
 #[derive(Component)]
-pub struct Chunk;
+pub struct Chunk(pub HashMap<IVec2, usize>);
 
 pub fn build_world(mut cmds: Commands) {
     cmds.queue(BuildChunk(IVec2::new(-1, -1)));
@@ -21,76 +24,112 @@ pub fn build_world(mut cmds: Commands) {
     cmds.queue(BuildChunk(IVec2::new(1, 1)));
 }
 
+#[derive(Bundle)]
+pub struct TileBundle {
+    pub sprite: Sprite,
+    pub transform: Transform,
+}
+
 pub struct BuildChunk(pub IVec2);
 
 impl Command for BuildChunk {
     fn apply(self, world: &mut World) -> () {
-        if world
-            .get_resource_mut::<ChunkStore>()
-            .expect("ChunkStore to be available")
-            .0
-            .get(&self.0)
-            .is_some()
-        {
-            warn!("Chunk {} already exists", self.0);
-            return;
-        };
+        info!("Building chunk at: {}", self.0);
 
-        info!("Building chunk at {}", self.0);
-
-        let block_registery = &world
-            .get_resource_mut::<BlockRegistery>()
-            .expect("Waiting for Block Registery")
-            .blocks
-            .clone();
         let asset_server = world.get_resource::<AssetServer>().unwrap().clone();
-        let biomes = biome::set_registery();
+        let mut rand = rand::rng();
 
-        let chunk_entity = world.spawn((
+        let biome_registery = &biome::get_registery();
+        let block_registery = &world.get_resource::<BlockRegistery>().unwrap().clone();
+        
+        let chunk_entity = world.spawn(
             Transform::from_xyz(
-                (self.0.x as f32 * TILE_SIZE) * CHUNK_SIZE, 
-                (self.0.y as f32 * TILE_SIZE) * CHUNK_SIZE, 
+                (self.0.x as f32 + CHUNK_SIZE) * TILE_SIZE, 
+                (self.0.y as f32 + CHUNK_SIZE) * TILE_SIZE, 
                 0.0
-            ),
-            Chunk,
-        )).id();
+            )
+        ).id();
 
-        let mut noise = FastNoise::seeded(10);
-        noise.set_noise_type(NoiseType::Cubic);
-        noise.set_frequency(0.005);
-
-        for y in 0..50 {
-            for x in 0..50 {
-                let nb = noise.get_noise(
-                    (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE,
-                    (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE,
+        for y in 0..CHUNK_SIZE as i32 {
+            for x in 0..CHUNK_SIZE as i32 {
+                let pos = IVec2::new(
+                    ((x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32, 
+                    ((y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
                 );
-                let mut biome = &biomes.biomes[0];
+                let biome = biome::get_biome(pos, biome_registery);
+                let ground_block = block_registery.blocks.get(&biome.get_ground(pos)).unwrap().clone();
+                let decor_block = block_registery.blocks.get(&biome.get_decor(pos)).unwrap().clone();
 
-                if nb >= 0.0 { biome = &biomes.biomes[1]; }
+                let mut ground_texture_path = format!("textures/{}.png", ground_block.texture);
+                if ground_block.multiple_textures {
+                    let index = rand.random_range(0..ground_block.textures.len());
+                    ground_texture_path = format!("textures/{}/{}.png",
+                        ground_block.texture,
+                        ground_block.textures.get(index).unwrap().clone());
+                }
 
-                let block = biome.get_block(IVec2 {
-                    x: ((x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
-                    y: ((y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
-                });
+                let mut decor_texture_path = format!("textures/{}.png", decor_block.texture);
+                if decor_block.multiple_textures {
+                    let index = rand.random_range(0..decor_block.textures.len());
+                    decor_texture_path = format!("textures/{}/{}.png",
+                        decor_block.texture,
+                        decor_block.textures.get(index).unwrap().clone());
+                }
 
-                let tile = world.spawn((
-                    Sprite {
-                        image: asset_server.load(
-                            format!("textures/{}.png", block_registery[block].texture),
+                let ground_tile = world.spawn(TileBundle {
+                    sprite: Sprite {
+                            image: asset_server.load(ground_texture_path),
+                            custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
+                            ..default()
+                        },
+                    transform: Transform {
+                        translation: Vec3::new(
+                            (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
+                            (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
+                            0.0
                         ),
-                        custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
                         ..default()
-                    },
-                    Transform::from_xyz(
-                        (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
-                        (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
-                        0.0
-                    ),
-                )).id();
+                    }
+                }).id();
+                let decor_tile = world.spawn(TileBundle {
+                    sprite: Sprite {
+                            image: asset_server.load(decor_texture_path),
+                            custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
+                            ..default()
+                        },
+                    transform: Transform {
+                        translation: Vec3::new(
+                            (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
+                            (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
+                            1.0
+                        ),
+                        ..default()
+                    }
+                }).id();
 
-                world.entity_mut(chunk_entity).add_child(tile);
+                world.entity_mut(chunk_entity)
+                    .add_child(ground_tile)
+                    .add_child(decor_tile);
             }
         }
     }
+}
+
+fn get_random_block_rotation(rnd: &mut rand::rngs::ThreadRng) -> Quat {
+    let rand_face = rnd.random_range(0..3);
+
+    if rand_face == 0 {
+        return Quat::from_rotation_z(0.0);
+    }
+    else if rand_face == 1 {
+        return Quat::from_rotation_z(f32::to_radians(90.0));
+    }
+    else if rand_face == 2 {
+        return Quat::from_rotation_z(f32::to_radians(-90.0));
+    }
+    else if rand_face == 3 {
+        return Quat::from_rotation_z(f32::to_radians(180.0));
+    }
+
+    Quat::from_rotation_z(0.0)
 }

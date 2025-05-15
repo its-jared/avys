@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 bevy = "0.16.0"
+bevy-inspector-egui = "0.31.0"
 bracket-noise = "0.8.7"
 rand = "0.9.1"
 ron = "0.10.1"

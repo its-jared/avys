@@ -6,7 +6,11 @@ use rand::prelude::*;
 pub struct MossGarden;
 
 impl Biome for MossGarden {
-    fn get_block(&self, pos: IVec2) -> usize {
+    fn get_ground(&self, _pos: IVec2) -> String {
+        "moss".to_string()
+    }
+
+    fn get_decor(&self, pos: IVec2) -> String {
         let mut rnd = rand::rng();
         let mut noise = FastNoise::seeded(10);
         noise.set_noise_type(NoiseType::Simplex);
@@ -16,10 +20,18 @@ impl Biome for MossGarden {
         nv = nv.powf(2.0);
         let rv = rnd.random_range(0..100);
 
-        if nv <= 0.0 && rv <= 50 {
-            return 1;
+        if nv >= -0.5 {
+            if rv <= 50 { return "flowers".to_string(); }
+            else if rv <= 10 { return "rock".to_string(); }
+        }
+        if rv <= 5 {
+            return "amber".to_string();
         }
 
-        0
+        "air".to_string()
+    }
+
+    fn get_name(&self) -> String {
+        "Moss Garden".to_string()
     }
 }

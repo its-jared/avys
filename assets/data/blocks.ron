@@ -1,29 +1,68 @@
 BlockRegistery(
-    blocks: [
-        Block(
+    blocks: {
+        "air": Block(
+            name: "Air",
+            texture: "air",
+            random_rotation: false,
+            multiple_textures: false,
+            textures: [],
+            layer: Decor,
+        ),
+        "moss": Block(
             name: "Moss",
-            id: 0,
             texture: "moss",
+            random_rotation: true,
+            multiple_textures: false,
+            textures: [],
+            layer: Ground,
         ),
-        Block(
-            name: "Flowering Moss",
-            id: 1,
-            texture: "flowering_moss",
+        "flowers": Block(
+            name: "Flowers",
+            texture: "flowers",
+            random_rotation: true,
+            multiple_textures: false,
+            textures: [],
+            layer: Decor,
         ),
-        Block(
+        "basalt": Block(
             name: "Basalt",
-            id: 2,
             texture: "basalt",
+            random_rotation: true,
+            multiple_textures: false,
+            textures: [],
+            layer: Ground,
         ),
-        Block(
-            name: "Ember Infused Basalt",
-            id: 3,
-            texture: "ember_infused_basalt",
+        "ember_ore": Block(
+            name: "Ember Ore",
+            texture: "ember_ore",
+            random_rotation: true,
+            multiple_textures: false,
+            textures: [],
+            layer: Decor,
         ),
-        Block(
+        "basalt_wall": Block(
             name: "Basalt Wall",
-            id: 4,
             texture: "basalt_wall",
+            random_rotation: true,
+            multiple_textures: false,
+            textures: [],
+            layer: Ground,
         ),
-    ]
+        "amber": Block(
+            name: "Amber",
+            texture: "amber",
+            random_rotation: false,
+            multiple_textures: false,
+            textures: [],
+            layer: Decor,
+        ),
+        "rock": Block(
+            name: "Rock",
+            texture: "rocks",
+            random_rotation: false,
+            multiple_textures: true,
+            textures: ["rock0", "rock1"],
+            layer: Decor,
+        ),
+    }
 )
