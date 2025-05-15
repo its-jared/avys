@@ -19,12 +19,12 @@ impl Biome for BasaltRidge {
         let nv = noise.get_noise(pos.x as f32, pos.y as f32);
         let rv = rnd.random_range(0..100);
 
-        if nv <= 0.0 && rv <= 5 {
-            return "ember_ore".to_string();
-        }         
-        else if nv >= 1.0 {
+        if nv >= 1.0 {
             return "basalt_wall".to_string();
         }
+        else if nv <= 0.0 && rv <= 5 {
+            return "ember_ore".to_string();
+        }       
 
         "air".to_string()
     }

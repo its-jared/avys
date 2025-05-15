@@ -24,9 +24,9 @@ pub fn get_registery() -> BiomeRegistery {
 pub fn get_biome(pos: IVec2, registery: &BiomeRegistery) -> &Box<dyn Biome + 'static> {
     let mut noise = FastNoise::seeded(10);
     noise.set_noise_type(NoiseType::Simplex);
-    noise.set_frequency(0.001);
+    noise.set_frequency(0.0001);
 
-    let v = noise.get_noise(pos.x as f32, pos.y as f32);
+    let v = noise.get_noise((pos.x + 500) as f32, (pos.y + 500) as f32);
     let mut biome_index = 0;
 
     if v <= 0.0 {

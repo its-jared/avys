@@ -1,12 +1,9 @@
 use std::collections::HashMap;
-
 use bevy::prelude::*;
-use bracket_noise::prelude::*;
 use rand::Rng;
 use crate::level::{biomes::biome, block::BlockRegistery};
-use super::{biomes::biome::BiomeRegistery, infinite::ChunkStore};
 
-pub const CHUNK_SIZE: f32 = 16.0;
+pub const CHUNK_SIZE: f32 = 32.0;
 pub const TILE_SIZE: f32 = 64.0;
 
 #[derive(Component)]
@@ -24,12 +21,6 @@ pub fn build_world(mut cmds: Commands) {
     cmds.queue(BuildChunk(IVec2::new(1, 1)));
 }
 
-#[derive(Bundle)]
-pub struct TileBundle {
-    pub sprite: Sprite,
-    pub transform: Transform,
-}
-
 pub struct BuildChunk(pub IVec2);
 
 impl Command for BuildChunk {
@@ -44,14 +35,14 @@ impl Command for BuildChunk {
         
         let chunk_entity = world.spawn(
             Transform::from_xyz(
-                (self.0.x as f32 + CHUNK_SIZE) * TILE_SIZE, 
-                (self.0.y as f32 + CHUNK_SIZE) * TILE_SIZE, 
+                (self.0.x as f32 * TILE_SIZE) * CHUNK_SIZE, 
+                (self.0.y as f32 * TILE_SIZE) * CHUNK_SIZE, 
                 0.0
             )
         ).id();
 
-        for y in 0..CHUNK_SIZE as i32 {
-            for x in 0..CHUNK_SIZE as i32 {
+        for y in 0..CHUNK_SIZE as i32 + 1 {
+            for x in 0..CHUNK_SIZE as i32 + 1 {
                 let pos = IVec2::new(
                     ((x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32, 
                     ((y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE) as i32,
@@ -76,13 +67,13 @@ impl Command for BuildChunk {
                         decor_block.textures.get(index).unwrap().clone());
                 }
 
-                let ground_tile = world.spawn(TileBundle {
-                    sprite: Sprite {
+                let ground_tile = world.spawn((
+                    Sprite {
                             image: asset_server.load(ground_texture_path),
                             custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
                             ..default()
                         },
-                    transform: Transform {
+                    Transform {
                         translation: Vec3::new(
                             (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
                             (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
@@ -90,14 +81,14 @@ impl Command for BuildChunk {
                         ),
                         ..default()
                     }
-                }).id();
-                let decor_tile = world.spawn(TileBundle {
-                    sprite: Sprite {
+                )).id();
+                let decor_tile = world.spawn((
+                    Sprite {
                             image: asset_server.load(decor_texture_path),
                             custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
                             ..default()
                         },
-                    transform: Transform {
+                    Transform {
                         translation: Vec3::new(
                             (x as f32 + (self.0.x as f32 + CHUNK_SIZE)) * TILE_SIZE, 
                             (y as f32 + (self.0.y as f32 + CHUNK_SIZE)) * TILE_SIZE, 
@@ -105,7 +96,7 @@ impl Command for BuildChunk {
                         ),
                         ..default()
                     }
-                }).id();
+                )).id();
 
                 world.entity_mut(chunk_entity)
                     .add_child(ground_tile)
@@ -115,6 +106,7 @@ impl Command for BuildChunk {
     }
 }
 
+#[allow(dead_code)]
 fn get_random_block_rotation(rnd: &mut rand::rngs::ThreadRng) -> Quat {
     let rand_face = rnd.random_range(0..3);
 

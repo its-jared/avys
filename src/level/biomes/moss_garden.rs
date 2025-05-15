@@ -21,10 +21,10 @@ impl Biome for MossGarden {
         let rv = rnd.random_range(0..100);
 
         if nv >= -0.5 {
-            if rv <= 50 { return "flowers".to_string(); }
-            else if rv <= 10 { return "rock".to_string(); }
+            if rv <= 10 { return "rock".to_string(); }
+            else if rv <= 50 { return "flowers".to_string(); }
         }
-        if rv <= 5 {
+        if rv <= 50 {
             return "amber".to_string();
         }
 
