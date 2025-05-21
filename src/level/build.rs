@@ -22,7 +22,7 @@ pub fn build_level(
                 y as f64 / 1000.0,
                 0.5
             ]);
-            let mut block = 1;
+            let mut block = 3;
 
             if v < 0.0 {
                 block = 2;

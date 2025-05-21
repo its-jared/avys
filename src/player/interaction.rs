@@ -22,7 +22,7 @@ pub fn handle_interaction(
         player_cursor.translation = level::level_to_world_pos(level_pos, 2.0);
 
         if buttons.just_pressed(MouseButton::Left) {
-            if level.remove_block(&mut c, level_pos) { level.set_block(&mut c, &a, level_pos, 2); }
+            if level.remove_block(&mut c, level_pos) { level.set_block(&mut c, &a, level_pos, 1); }
         }        
         if buttons.just_pressed(MouseButton::Right) {
             level.print_blocks();

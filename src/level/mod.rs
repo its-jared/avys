@@ -39,7 +39,8 @@ impl Level {
             block_registery: vec!(
                 Block::new(0, String::from("textures/air.png")),
                 Block::new(1, String::from("textures/basalt_wall.png")),
-                Block::new(2, String::from("textures/flowers.png")),
+                Block::new(2, String::from("textures/moss.png")),
+                Block::new(3, String::from("textures/basalt.png")),
             )
         }
     }

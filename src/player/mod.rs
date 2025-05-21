@@ -42,7 +42,7 @@ fn setup(
         Transform::from_translation(center),
         Sprite {
             image: a.load("textures/player.png"),
-            custom_size: Some(Vec2::new(32.0, 32.0)),
+            custom_size: Some(Vec2::new(64.0, 64.0)),
             ..default()
         }
     ));
