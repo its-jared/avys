@@ -1,0 +1,63 @@
+use bevy::prelude::*;
+use crate::{level, rotate_to_cursor::RotateToCursor};
+
+pub mod movement;
+pub mod interaction;
+
+#[derive(Component)]
+pub struct Player;
+
+#[derive(Component)]
+pub struct PlayerCursor;
+
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .add_systems(Startup, setup)
+            .add_systems(Update, movement::handle_movement)
+            .add_systems(Update, interaction::handle_interaction
+                .run_if(resource_exists::<level::Level>));
+    }
+}
+
+fn setup(
+    mut c: Commands,
+    a: Res<AssetServer>,
+) {
+    let center = level::level_to_world_pos(IVec2::new(
+        level::TILE_SIZE / 2,
+        level::TILE_SIZE / 2,
+    ), 2.0);
+    
+    c.spawn((
+        Camera2d::default(),
+        Transform::from_translation(center)
+    ));
+    c.spawn((
+        Player,
+        RotateToCursor,
+
+        Transform::from_translation(center),
+        Sprite {
+            image: a.load("textures/player.png"),
+            custom_size: Some(Vec2::new(32.0, 32.0)),
+            ..default()
+        }
+    ));
+
+    c.spawn((
+        PlayerCursor,
+
+        Transform::from_translation(
+            level::level_to_world_pos(
+                level::world_to_level_pos(Vec2::new(center.x, center.y)), 
+                1.0)),
+        Sprite {
+            image: a.load("textures/cursor.png"),
+            custom_size: Some(Vec2::new(level::TILE_SIZE as f32, level::TILE_SIZE as f32)),
+            ..default()
+        }
+    ));
+}

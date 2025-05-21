@@ -1,0 +1,9 @@
+[package]
+name = "avys"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+bevy = "0.16.0"
+noise = "0.9.0"
+rand = "0.9.1"
