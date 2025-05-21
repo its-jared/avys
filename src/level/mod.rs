@@ -25,8 +25,8 @@ pub fn level_to_world_pos(lpos: IVec2, z: f32) -> Vec3 {
 
 #[derive(Resource)]
 pub struct Level {
-    pub blocks: HashMap<IVec2, usize>,
-    pub block_entities: HashMap<IVec2, Entity>,
+    pub floor_layer: HashMap<IVec2, (usize, Entity)>,
+    pub wall_layer: HashMap<IVec2, (usize, Entity)>,
     pub block_registery: Vec<Block>,
 }
 
@@ -34,14 +34,9 @@ pub struct Level {
 impl Level {
     fn new() -> Self {
         Self {
-            blocks: HashMap::new(),
-            block_entities: HashMap::new(),
-            block_registery: vec!(
-                Block::new(0, String::from("textures/air.png")),
-                Block::new(1, String::from("textures/basalt_wall.png")),
-                Block::new(2, String::from("textures/moss.png")),
-                Block::new(3, String::from("textures/basalt.png")),
-            )
+            floor_layer: HashMap::new(),
+            wall_layer: HashMap::new(),
+            block_registery: block::get_blocks(),
         }
     }
 
@@ -50,49 +45,68 @@ impl Level {
         pos: IVec2, id: usize
     ) {
         if let Some(block) = self.block_registery.get(id) {
-            self.blocks.insert(pos, id);
-            
             let block_entity = c.spawn((
-                Transform::from_translation(level_to_world_pos(pos, 0.0)),
-                Sprite {
-                    image: a.load(block.texture_location.clone()),
-                    custom_size: Some(Vec2::new(TILE_SIZE as f32, TILE_SIZE as f32)),
-                    ..default()
-                }
+                Transform::from_translation(level_to_world_pos(pos, 0.0))
+                    .with_scale(Vec3::splat(4.0)),
+                Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))) 
             )).id();
 
-            self.block_entities.insert(pos, block_entity);
+            match block.layer {
+                block::BlockLayer::Floor => {
+                    self.remove_block(c, pos, block::BlockLayer::Floor);
+                    self.floor_layer.insert(pos, (id, block_entity));
+                },
+                block::BlockLayer::Wall => {
+                    self.remove_block(c, pos, block::BlockLayer::Wall);
+
+                    self.wall_layer.insert(pos, (id, block_entity));
+                }
+            }
         }
     }
 
     pub fn remove_block(
         &mut self, c: &mut Commands,
-        pos: IVec2
+        pos: IVec2, layer: block::BlockLayer,
     ) -> bool {
-        if self.blocks.contains_key(&pos)
-            && self.block_entities.contains_key(&pos) 
-        {
-            self.blocks.remove(&pos);
+        match layer {
+                block::BlockLayer::Floor => {
+                    if self.floor_layer.contains_key(&pos) {
+                        let block = self.floor_layer.get(&pos).unwrap().to_owned();
+                        c.entity(block.1).despawn();
+                        self.floor_layer.remove(&pos);
 
-            let entity = self.block_entities
-                .get(&pos)
-                .unwrap()
-                .to_owned();
-            c.entity(entity).despawn();
-            self.block_entities.remove(&pos);
+                        return true;
+                    }
+                },
+                block::BlockLayer::Wall => {
+                    if self.wall_layer.contains_key(&pos) {
+                        let block = self.wall_layer.get(&pos).unwrap().to_owned();
+                        c.entity(block.1).despawn();
+                        self.wall_layer.remove(&pos);
 
-            return true;
-        }
-        
+                        return true;
+                    }
+                }
+            }
+
         false
     }
 
     pub fn print_blocks(&self) {
-        for block in &self.blocks {
-            println!("pos: {}, id: {}", block.0, block.1);
+        println!("Floor");
+
+        for floor in &self.floor_layer {
+            println!("pos: {}, id: {}", floor.0, floor.1.0);
         }
 
-        println!("===")
+        println!("Wall");
+
+        for wall in &self.wall_layer {
+            println!("pos: {}, id: {}", wall.0, wall.1.0);
+        }
+
+        println!("===");
     }
 }
 

@@ -22,10 +22,10 @@ pub fn build_level(
                 y as f64 / 1000.0,
                 0.5
             ]);
-            let mut block = 3;
+            let mut block = 2;
 
             if v < 0.0 {
-                block = 2;
+                block = 1;
             }
 
             level.set_block(&mut c, &a, IVec2::new(x, y), block);

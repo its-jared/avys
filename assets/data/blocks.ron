@@ -1,0 +1,37 @@
+[
+    Block(
+        name: "Air",
+        id: 0,
+        texture_id: "air",
+        solid: false,
+        layer: Floor,
+    ),
+    Block(
+        name: "Moss",
+        id: 1,
+        texture_id: "moss",
+        solid: false,
+        layer: Floor,
+    ),
+    Block(
+        name: "Basalt",
+        id: 2,
+        texture_id: "basalt",
+        solid: false,
+        layer: Floor,
+    ),
+    Block(
+        name: "Basalt Wall",
+        id: 3,
+        texture_id: "basalt_wall",
+        solid: true,
+        layer: Wall,
+    ),
+    Block(
+        name: "Flowers",
+        id: 4,
+        texture_id: "flowers",
+        solid: false,
+        layer: Wall,
+    ),
+]
