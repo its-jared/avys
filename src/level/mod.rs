@@ -4,6 +4,7 @@ use block::Block;
 
 pub mod build;
 pub mod block;
+pub mod biome;
 
 pub const TILE_SIZE: i32 = 64;
 pub const LEVEL_SIZE: i32 = 100;
@@ -70,27 +71,46 @@ impl Level {
         pos: IVec2, layer: block::BlockLayer,
     ) -> bool {
         match layer {
-                block::BlockLayer::Floor => {
-                    if self.floor_layer.contains_key(&pos) {
-                        let block = self.floor_layer.get(&pos).unwrap().to_owned();
-                        c.entity(block.1).despawn();
-                        self.floor_layer.remove(&pos);
+            block::BlockLayer::Floor => {
+                if self.floor_layer.contains_key(&pos) {
+                    let block = self.floor_layer.get(&pos).unwrap().to_owned();
+                    c.entity(block.1).despawn();
+                    self.floor_layer.remove(&pos);
 
-                        return true;
-                    }
-                },
-                block::BlockLayer::Wall => {
-                    if self.wall_layer.contains_key(&pos) {
-                        let block = self.wall_layer.get(&pos).unwrap().to_owned();
-                        c.entity(block.1).despawn();
-                        self.wall_layer.remove(&pos);
+                    return true;
+                }
+            },
+            block::BlockLayer::Wall => {
+                if self.wall_layer.contains_key(&pos) {
+                    let block = self.wall_layer.get(&pos).unwrap().to_owned();
+                    c.entity(block.1).despawn();
+                    self.wall_layer.remove(&pos);
 
-                        return true;
-                    }
+                    return true;
                 }
             }
+        }
 
         false
+    }
+
+    pub fn get_block(
+        &self, pos: IVec2, layer: block::BlockLayer
+    ) -> Option<usize> {
+        match layer {
+            block::BlockLayer::Floor => {
+                if self.floor_layer.contains_key(&pos) {
+                    return Some(self.floor_layer.get(&pos).unwrap().0);
+                }
+            },
+            block::BlockLayer::Wall => {
+                if self.wall_layer.contains_key(&pos) {
+                    return Some(self.wall_layer.get(&pos).unwrap().0);
+                }
+            }
+        }
+
+        None
     }
 
     pub fn print_blocks(&self) {

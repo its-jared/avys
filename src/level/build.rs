@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use rand::prelude::*;
-use noise::{NoiseFn, Perlin};
+use crate::level::biome::{moss_gardens::MossGardens, Biome};
+
 use super::*;
 
 pub fn build_level(
@@ -10,25 +11,18 @@ pub fn build_level(
 ) {
     let mut rng = rand::rng();
     let seed = rng.next_u32();
-    let perlin = Perlin::new(seed);
 
     info!("Level seed: [{}]", seed);
     info!("Level size: [{}x{}]", LEVEL_SIZE, LEVEL_SIZE);
 
     for x in 0..LEVEL_SIZE {
         for y in 0..LEVEL_SIZE {
-            let v = perlin.get([
-                x as f64 / 1000.0,
-                y as f64 / 1000.0,
-                0.5
-            ]);
-            let mut block = 2;
+            let pos = IVec2::new(x, y);
+            level.set_block(&mut c, &a, pos, MossGardens::get_floor(pos, seed));
 
-            if v < 0.0 {
-                block = 1;
+            if let Some(wall) = MossGardens::get_wall(pos, seed) {
+                level.set_block(&mut c, &a, pos, wall);
             }
-
-            level.set_block(&mut c, &a, IVec2::new(x, y), block);
         }
     }
 }
