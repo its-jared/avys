@@ -7,6 +7,7 @@ pub mod game;
 pub mod rotate_to_cursor;
 pub mod enemy;
 pub mod level;
+pub mod ambiance;
 
 fn main() {
     App::new()

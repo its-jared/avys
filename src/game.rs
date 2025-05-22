@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::{gui, level, player, rotate_to_cursor};
+use crate::*;
 
 pub struct GamePlugin;
 
@@ -10,6 +10,7 @@ impl Plugin for GamePlugin {
                 gui::DebugUIPlugin,
                 player::PlayerPlugin,
                 level::LevelPlugin,
+                ambiance::AmbiancePlugin,
             ))
             
             .add_systems(Update, rotate_to_cursor::handle_rotations);
