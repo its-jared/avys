@@ -6,7 +6,16 @@ use super::*;
 pub struct MossGardens; 
 
 impl Biome for MossGardens {
-    fn get_floor(_pos: IVec2, _seed: u32) -> usize {
+    fn get_floor(pos: IVec2, seed: u32) -> usize {
+        let perlin = Perlin::new(seed);
+        let v = perlin.get([
+            pos.x as f64 / 5.0,
+            pos.y as f64 / 5.0,
+            0.2
+        ]);
+
+        if v < -0.3 { return 7; }
+        
         1
     }
 
@@ -22,10 +31,10 @@ impl Biome for MossGardens {
         ]);
 
         if v >= 0.0 {
-            if r < 10 {
-                return Some(4);
-            } else if r < 25 {
+            if r < 5 {
                 return Some(5);
+            } else if r < 10 {
+                return Some(4);
             }
         }
 

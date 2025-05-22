@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 use block::Block;
 
 pub mod build;
@@ -46,11 +47,22 @@ impl Level {
         pos: IVec2, id: usize
     ) {
         if let Some(block) = self.block_registery.get(id) {
-            let block_entity = c.spawn((
-                Transform::from_translation(level_to_world_pos(pos, 0.0))
-                    .with_scale(Vec3::splat(4.0)),
-                Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))) 
-            )).id();
+            let block_entity: Entity;
+
+            if !block.solid {
+                block_entity = c.spawn((
+                    Transform::from_translation(level_to_world_pos(pos, 0.0))
+                        .with_scale(Vec3::splat(4.0)),
+                    Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))) 
+                )).id();
+            } else {
+                block_entity = c.spawn((
+                    Transform::from_translation(level_to_world_pos(pos, 0.0))
+                        .with_scale(Vec3::splat(4.0)),
+                    Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))),
+                    Collider::cuboid(block.colider_size, block.colider_size)
+                )).id();
+            }
 
             match block.layer {
                 block::BlockLayer::Floor => {
@@ -59,7 +71,6 @@ impl Level {
                 },
                 block::BlockLayer::Wall => {
                     self.remove_block(c, pos, block::BlockLayer::Wall);
-
                     self.wall_layer.insert(pos, (id, block_entity));
                 }
             }

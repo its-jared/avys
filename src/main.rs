@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 pub mod gui;
 pub mod player;
@@ -12,6 +13,10 @@ fn main() {
         .add_plugins((
             DefaultPlugins
                 .set(ImagePlugin::default_nearest()),
+
+            RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
+            //RapierDebugRenderPlugin::default(),
+            
             game::GamePlugin,
         ))
         .insert_resource(ClearColor(Color::BLACK))

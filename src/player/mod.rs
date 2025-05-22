@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 use crate::{level, rotate_to_cursor::RotateToCursor};
 
 pub mod movement;
@@ -39,7 +40,13 @@ fn setup(
         Player,
         RotateToCursor,
 
-        Transform::from_translation(center),
+        KinematicCharacterController {
+            translation: Some(Vec2::new(center.x, center.y)),
+            ..default()
+        },
+        RigidBody::KinematicPositionBased,
+        Collider::ball(16.0),
+
         Sprite {
             image: a.load("textures/player.png"),
             custom_size: Some(Vec2::new(64.0, 64.0)),
