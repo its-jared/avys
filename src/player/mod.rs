@@ -16,10 +16,13 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app
+            .insert_resource(interaction::ActiveItem(3))
             .add_systems(Startup, setup)
             .add_systems(Update, movement::handle_movement)
-            .add_systems(Update, interaction::handle_interaction
-                .run_if(resource_exists::<level::Level>));
+            .add_systems(Update, (
+                interaction::handle_interaction,
+                interaction::change_selected_block                    
+            ).run_if(resource_exists::<level::Level>));
     }
 }
 

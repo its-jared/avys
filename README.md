@@ -5,6 +5,13 @@
 Avys is a top down 2d adventure sandbox game in the making. The goal for alpha is to
 have the core engine and gameplay loop up and running.
 
+## Controls
+
+- Walking: WASD.
+- Place Block: Right Click
+- Break Block: Left Click
+- Change Block: Mouse Wheel or - or + (shift not needed)
+
 ## Credits
 
 - Engine: Bevy 0.16.
