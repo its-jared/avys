@@ -1,0 +1,42 @@
+use bevy::prelude::*;
+use noise::{NoiseFn, Perlin};
+use rand::Rng;
+use super::*;
+
+pub struct BasaltRidge; 
+
+impl Biome for BasaltRidge {
+    fn get_floor(_pos: IVec2, _seed: u32) -> usize {
+        2
+    }
+
+    fn get_wall(pos: IVec2, seed: u32) -> Option<usize> {
+        let perlin = Perlin::new(seed);
+        let mut rng = rand::rng();
+
+        let r = rng.random_range(0..100);
+        let v1 = perlin.get([
+            pos.x as f64 / 50.0,
+            pos.y as f64 / 50.0,
+            0.5
+        ]);
+
+        let v2 = perlin.get([
+            pos.x as f64 / 5.0,
+            pos.y as f64 / 5.0,
+            0.2
+        ]);
+
+        if v1 >= 0.0 {
+            if r < 5 {
+                return Some(5);
+            }
+        }
+
+        if v2 < -0.2 {
+            return Some(3)
+        }
+
+        None
+    }
+}
