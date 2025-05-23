@@ -15,6 +15,6 @@ have the core engine and gameplay loop up and running.
 ## Credits
 
 - Engine: Bevy 0.16.
-- Art & Code: Jared HR.
+- Music and Art: Jared HR.
 - Font: 'Monocraft' by Idrees.
 - Collisoin & Physics: Bevy Rapier 2d.
