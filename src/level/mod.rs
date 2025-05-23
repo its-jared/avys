@@ -3,9 +3,12 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use block::Block;
 
+use crate::config;
+
 pub mod build;
 pub mod block;
 pub mod biome;
+pub mod structure;
 
 pub const TILE_SIZE: i32 = 64;
 pub const LEVEL_SIZE: i32 = 100;
@@ -147,6 +150,6 @@ impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
         app
             .insert_resource(Level::new())
-            .add_systems(Startup, build::build_level);
+            .add_systems(Startup, build::build_level.run_if(resource_exists::<config::GameConfig>));
     }
 }

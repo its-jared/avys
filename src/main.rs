@@ -8,9 +8,11 @@ pub mod rotate_to_cursor;
 pub mod enemy;
 pub mod level;
 pub mod ambiance;
+pub mod config;
 
 fn main() {
     App::new()
+        .insert_resource(config::fetch_game_config())
         .add_plugins((
             DefaultPlugins
                 .set(ImagePlugin::default_nearest()),
