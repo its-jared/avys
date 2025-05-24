@@ -33,6 +33,7 @@ pub struct Level {
     pub floor_layer: HashMap<IVec2, (usize, Entity)>,
     pub wall_layer: HashMap<IVec2, (usize, Entity)>,
     pub block_registery: Vec<Block>,
+    pub biome_registery: Vec<Box<dyn biome::Biome>>,
 }
 
 #[allow(dead_code)]
@@ -42,6 +43,7 @@ impl Level {
             floor_layer: HashMap::new(),
             wall_layer: HashMap::new(),
             block_registery: block::get_blocks(),
+            biome_registery: biome::get_biomes(),
         }
     }
 

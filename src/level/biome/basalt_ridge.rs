@@ -3,14 +3,15 @@ use noise::{NoiseFn, Perlin};
 use rand::Rng;
 use super::*;
 
+#[derive(Clone)]
 pub struct BasaltRidge; 
 
 impl Biome for BasaltRidge {
-    fn get_floor(_pos: IVec2, _seed: u32) -> usize {
+    fn get_floor(&self, _pos: IVec2, _seed: u32) -> usize {
         2
     }
 
-    fn get_wall(pos: IVec2, seed: u32) -> Option<usize> {
+    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<usize> {
         let perlin = Perlin::new(seed);
         let mut rng = rand::rng();
 
@@ -27,7 +28,7 @@ impl Biome for BasaltRidge {
             0.2
         ]);
 
-        if v1 >= 0.0 {
+        if v1 < 0.0 {
             if r < 5 {
                 return Some(5);
             }

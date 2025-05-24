@@ -3,10 +3,11 @@ use noise::{NoiseFn, Perlin};
 use rand::Rng;
 use super::*;
 
+#[derive(Clone)]
 pub struct MossGardens; 
 
 impl Biome for MossGardens {
-    fn get_floor(pos: IVec2, seed: u32) -> usize {
+    fn get_floor(&self, pos: IVec2, seed: u32) -> usize {
         let perlin = Perlin::new(seed);
         let v = perlin.get([
             pos.x as f64 / 5.0,
@@ -19,7 +20,7 @@ impl Biome for MossGardens {
         1
     }
 
-    fn get_wall(pos: IVec2, seed: u32) -> Option<usize> {
+    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<usize> {
         let perlin = Perlin::new(seed);
         let mut rng = rand::rng();
 
