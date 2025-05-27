@@ -71,4 +71,12 @@
         colider_size: 0.0,
         layer: Floor,
     ),
+    Block(
+        name: "Polished Basalt",
+        id: 9,
+        texture_id: "polished_basalt",
+        solid: false,
+        colider_size: 0.0,
+        layer: Floor,
+    ),
 ]

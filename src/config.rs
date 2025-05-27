@@ -5,6 +5,7 @@ use bevy::prelude::*;
 #[derive(Deserialize, Debug)]
 pub struct GameExperiments {
     pub structure_gen: bool,
+    pub flat_world: bool,
 }
 
 #[derive(Resource, Deserialize)]

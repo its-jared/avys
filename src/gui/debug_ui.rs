@@ -7,7 +7,7 @@ pub struct PlayerPosLabel;
 pub fn setup(
     mut c: Commands,
     a: Res<AssetServer>,
-    config: Res<config::GameConfig>,
+    _config: Res<config::GameConfig>,
 ) {
     let font = TextFont {
         font: a.load("Monocraft.ttc"),

@@ -1,8 +1,9 @@
 (
     version: (0, 0, 1),
 
-    experiments_enabled: false,
+    experiments_enabled: true,
     experiments: (
         structure_gen: true,
+        flat_world: true,
     )
 )

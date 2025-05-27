@@ -19,7 +19,13 @@ pub fn build_level(
     for x in 0..LEVEL_SIZE {
         for y in 0..LEVEL_SIZE {
             let pos = ivec2(x, y);
-            let biome = biome::get_biome_at_pos(pos, seed);
+            let biome: Box<dyn biome::Biome + 'static>;
+
+            if config.experiments_enabled && config.experiments.flat_world {
+                biome = biome::get_biomes().get(2).unwrap().clone_box();
+            } else {
+                biome = biome::get_biome_at_pos(pos, seed);
+            }
 
             level.set_block(&mut c, &a, pos, biome.get_floor(pos, seed));
 

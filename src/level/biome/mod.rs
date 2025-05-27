@@ -3,11 +3,13 @@ use noise::{Worley, NoiseFn};
 
 pub mod moss_gardens;
 pub mod basalt_ridge;
+pub mod flat_lands;
 
 pub fn get_biomes() -> Vec<Box<dyn Biome>> {
     vec![
         Box::new(moss_gardens::MossGardens),
         Box::new(basalt_ridge::BasaltRidge),
+        Box::new(flat_lands::FlatLands),
     ]
 }
 
