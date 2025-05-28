@@ -15,6 +15,7 @@ pub fn build_level(
 
     info!("Level seed: [{}]", seed);
     info!("Level size: [{}x{}]", LEVEL_SIZE, LEVEL_SIZE);
+    info!("Biome noise freq: [{}]", biome::get_freq());
 
     for x in 0..LEVEL_SIZE {
         for y in 0..LEVEL_SIZE {

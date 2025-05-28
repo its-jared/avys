@@ -58,14 +58,14 @@ impl Level {
                 block_entity = c.spawn((
                     Transform::from_translation(level_to_world_pos(pos, 0.0))
                         .with_scale(Vec3::splat(4.0)),
-                    Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))) 
+                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", block.texture_id))) 
                 )).id();
             } else {
                 block_entity = c.spawn((
                     Transform::from_translation(level_to_world_pos(pos, 0.0))
                         .with_scale(Vec3::splat(4.0)),
-                    Sprite::from_image(a.load(format!("textures/{}.png", block.texture_id))),
-                    Collider::cuboid(block.colider_size, block.colider_size)
+                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", block.texture_id))),
+                    Collider::cuboid(block.colider_size.0, block.colider_size.1)
                 )).id();
             }
 
@@ -143,6 +143,19 @@ impl Level {
         }
 
         println!("===");
+    }
+
+    pub fn set_color_block(
+        &mut self, c: &mut Commands,
+        pos: IVec2, color: Color
+    ) {
+        let noise_block = c.spawn((
+            Transform::from_translation(level_to_world_pos(pos, 0.0))
+                .with_scale(Vec3::splat(4.0)),
+            Sprite::from_color(color, vec2(16.0, 16.0)) 
+        )).id();
+
+        self.floor_layer.insert(pos, (1, noise_block));
     }
 }
 
