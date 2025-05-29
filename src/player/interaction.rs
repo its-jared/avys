@@ -28,9 +28,9 @@ pub fn handle_interaction(
         player_cursor.0.translation = level::level_to_world_pos(level_pos, 2.0);
         block_indicator.image = a.load(format!("textures/blocks/{}.png", level.block_registery.get(active_item.0).unwrap().texture_id));
 
-        if buttons.pressed(MouseButton::Left) {
+        /*if buttons.pressed(MouseButton::Left) {
             level.remove_block(&mut c, level_pos, level::block::BlockLayer::Wall);
-        }
+        }*/
 
         if buttons.pressed(MouseButton::Right) {
             level.set_block(&mut c, &a, level_pos, active_item.0);

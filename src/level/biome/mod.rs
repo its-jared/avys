@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use noise::{Worley, NoiseFn};
-use super::*;
 
 pub mod moss_gardens;
 pub mod basalt_ridge;
@@ -17,7 +16,7 @@ pub fn get_biomes() -> Vec<Box<dyn Biome>> {
 }
 
 pub fn get_freq() -> f64 {
-    (LEVEL_SIZE / get_biomes().len() as i32) as f64
+    1000.0
 }
 
 pub fn get_biome_at_pos(pos: IVec2, seed: u32) -> Box<dyn Biome + 'static> {
