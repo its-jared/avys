@@ -1,9 +1,13 @@
 (
+<<<<<<< HEAD
     version: (0, 0, 3),
+=======
+    version: (0, 0, 1),
+>>>>>>> parent of 09a6720 (desert)
 
-    experiments_enabled: false,
+    experiments_enabled: true,
     experiments: (
-        structure_gen: false,
+        structure_gen: true,
         flat_world: true,
     )
 )

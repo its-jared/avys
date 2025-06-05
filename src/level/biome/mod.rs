@@ -4,32 +4,33 @@ use noise::{Worley, NoiseFn};
 pub mod moss_gardens;
 pub mod basalt_ridge;
 pub mod flat_lands;
-pub mod desert;
 
 pub fn get_biomes() -> Vec<Box<dyn Biome>> {
     vec![
         Box::new(moss_gardens::MossGardens),
         Box::new(basalt_ridge::BasaltRidge),
         Box::new(flat_lands::FlatLands),
-        Box::new(desert::Desert),
     ]
 }
 
+<<<<<<< HEAD
 pub fn get_freq() -> f64 {
     1000.0
 }
 
+=======
+>>>>>>> parent of 09a6720 (desert)
 pub fn get_biome_at_pos(pos: IVec2, seed: u32) -> Box<dyn Biome + 'static> {
     let biomes = get_biomes();
     let worley = Worley::new(seed);
     let v = worley.get([
-        pos.x as f64 / get_freq(),
-        pos.y as f64 / get_freq(),
+        pos.x as f64 / 100.0,
+        pos.y as f64 / 100.0,
         0.53,
     ]);
 
     if v > 0.0 { return biomes.get(0).unwrap().clone_box(); }
-    biomes.get(3).unwrap().clone_box()
+    biomes.get(1).unwrap().clone_box()
 }
 
 pub trait Biome: 'static + BiomeClone + Sync + Send {

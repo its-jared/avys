@@ -8,7 +8,6 @@ have the core engine and gameplay loop up and running.
 ## Controls
 
 - Walking: WASD.
-- Run: Left Shift (while holding).
 - Place Block: Right Click
 - Break Block: Left Click
 - Change Block: Mouse Wheel or - or + (shift not needed)
