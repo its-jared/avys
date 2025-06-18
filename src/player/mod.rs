@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{core_pipeline::{bloom::Bloom, tonemapping::{DebandDither, Tonemapping}}, prelude::*};
 use bevy_rapier2d::prelude::*;
 use crate::{level, rotate_to_cursor::RotateToCursor};
 
@@ -37,7 +37,18 @@ fn setup(
     
     c.spawn((
         Camera2d::default(),
-        Transform::from_translation(center)
+        Camera {
+            hdr: true,
+            clear_color: ClearColorConfig::Custom(Color::BLACK),
+            ..default()
+        },
+        Transform::from_translation(center),
+        Bloom {
+            intensity: 0.001,
+            ..default()
+        },
+        Tonemapping::TonyMcMapface,
+        DebandDither::Enabled,
     ));
     c.spawn((
         Player,

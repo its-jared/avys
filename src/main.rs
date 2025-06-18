@@ -15,16 +15,16 @@ fn main() {
         .insert_resource(config::fetch_game_config())
         .add_plugins((
             DefaultPlugins
-                .set(ImagePlugin::default_nearest())
                 .set(WindowPlugin {
                     primary_window: Some(Window {
+                        title: "Avys - Alpha".to_string(),
                         position: WindowPosition::Centered(MonitorSelection::Primary),
-                        title: String::from("Avys - Infinite Terrain"),
-                        resizable: false, 
+                        resizable: false,
                         ..default()
                     }),
                     ..default()
-                }),
+                })
+                .set(ImagePlugin::default_nearest()),
 
             RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
             //RapierDebugRenderPlugin::default(),

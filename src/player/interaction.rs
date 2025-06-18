@@ -1,5 +1,5 @@
 use bevy::{input::mouse::{MouseScrollUnit, MouseWheel}, prelude::*};
-use crate::level;
+use crate::{gui::hotbar::BlockIndicator, level};
 use super::*;
 
 #[derive(Resource)]
@@ -14,22 +14,23 @@ pub fn handle_interaction(
     q_window: Query<&Window>,
     q_camera: Query<(&Camera, &GlobalTransform)>,
     mut q_cursor: Query<(&mut Transform, &mut Sprite), With<PlayerCursor>>,
+    mut q_block_indicator: Query<&mut ImageNode, With<BlockIndicator>>,
 ) {
     let window = q_window.single().unwrap();
 
     if let Some(cursor_pos) = window.cursor_position() {
         let (camera, camera_transform) = q_camera.single().unwrap();
         let mut player_cursor = q_cursor.single_mut().unwrap();
+        let mut block_indicator = q_block_indicator.single_mut().unwrap();
         let world_cursor_pos = camera.viewport_to_world_2d(camera_transform, cursor_pos).unwrap();
         let level_pos = level::world_to_level_pos(world_cursor_pos);
 
         player_cursor.0.translation = level::level_to_world_pos(level_pos, 2.0);
-        player_cursor.1.image = a.load(format!("textures/{}.png", level.block_registery.get(active_item.0).unwrap().texture_id));
-        player_cursor.1.color = Color::srgba(1.0, 1.0, 1.0, 0.5);
+        block_indicator.image = a.load(format!("textures/blocks/{}.png", level.block_registery.get(active_item.0).unwrap().texture_id));
 
-        /*if buttons.pressed(MouseButton::Left) {
+        if buttons.pressed(MouseButton::Left) {
             level.remove_block(&mut c, level_pos, level::block::BlockLayer::Wall);
-        }*/
+        }
 
         if buttons.pressed(MouseButton::Right) {
             level.set_block(&mut c, &a, level_pos, active_item.0);

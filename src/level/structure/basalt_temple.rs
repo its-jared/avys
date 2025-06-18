@@ -64,7 +64,7 @@ impl Structure for BasaltTemple {
 
         for x in 0..design.len() {
             for y in 0..design.get(x).unwrap().len() {
-                //level.set_block(c, a, ivec2(x as i32, y as i32) + offset, design[x][y]);
+                level.set_block(c, a, ivec2(x as i32, y as i32) + offset, design[x][y]);
             }
         }
     }

@@ -1,24 +1,47 @@
-use std::collections::HashMap;
 use bevy::prelude::*;
 use super::*;
 
-#[derive(Clone)]
+pub const CHUNK_SIZE: i32 = 16;
+
+pub fn level_pos_to_chunk_id(lpos: IVec2) -> IVec2 {
+    ivec2(
+        lpos.x / CHUNK_SIZE,
+        lpos.y / CHUNK_SIZE
+    )
+}
+
+pub fn chunk_id_to_level_pos(cid: IVec2) -> IVec2 {
+    ivec2(
+        cid.x * CHUNK_SIZE,
+        cid.y * CHUNK_SIZE
+    )
+}
+
 pub struct Chunk {
     pub floor_layer: HashMap<IVec2, (usize, Entity)>,
     pub wall_layer: HashMap<IVec2, (usize, Entity)>,
 }
 
+#[allow(dead_code)]
 impl Chunk {
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             floor_layer: HashMap::new(),
-            wall_layer: HashMap::new()
+            wall_layer: HashMap::new(),
+        }
+    }
+
+    pub fn build(&mut self, level: &Level, c: &mut Commands, a: &AssetServer) {
+        for x in 0..CHUNK_SIZE {
+            for y in 0..CHUNK_SIZE {
+                self.set_block(level, c, a, ivec2(x, y), 1);
+            }
         }
     }
 
     pub fn set_block(
-    &mut self, c: &mut Commands, a: &AssetServer, level: &Level,
-    pos: IVec2, id: usize
+        &mut self, level: &Level, c: &mut Commands, a: &AssetServer,
+        pos: IVec2, id: usize
     ) {
         if let Some(block) = level.block_registery.get(id) {
             let block_entity: Entity;

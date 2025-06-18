@@ -13,7 +13,7 @@ pub struct Block {
     pub id: i32, 
     pub texture_id: String, 
     pub solid: bool,
-    pub colider_size: f32,
+    pub colider_size: (f32, f32),
     pub layer: BlockLayer,
 }
 

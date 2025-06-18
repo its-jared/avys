@@ -4,7 +4,7 @@
         id: 0,
         texture_id: "air",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -12,7 +12,7 @@
         id: 1,
         texture_id: "moss",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -20,7 +20,7 @@
         id: 2,
         texture_id: "basalt",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -28,7 +28,7 @@
         id: 3,
         texture_id: "basalt_wall",
         solid: true,
-        colider_size: 8.0,
+        colider_size: (8.0, 8.0),
         layer: Wall,
     ),
     Block(
@@ -36,7 +36,7 @@
         id: 4,
         texture_id: "flowers",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Wall,
     ),
     Block(
@@ -44,7 +44,7 @@
         id: 5,
         texture_id: "rocks/rock0",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Wall,
     ),
     Block(
@@ -52,7 +52,7 @@
         id: 6,
         texture_id: "red_moss",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -60,7 +60,7 @@
         id: 7,
         texture_id: "dirt",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -68,7 +68,7 @@
         id: 8,
         texture_id: "basalt_tile",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
     Block(
@@ -76,7 +76,39 @@
         id: 9,
         texture_id: "polished_basalt",
         solid: false,
-        colider_size: 0.0,
+        colider_size: (0.0, 0.0),
+        layer: Floor,
+    ),
+    Block(
+        name: "Sand",
+        id: 10,
+        texture_id: "sand",
+        solid: false,
+        colider_size: (0.0, 0.0),
+        layer: Floor,
+    ),
+    Block(
+        name: "Cactus",
+        id: 11,
+        texture_id: "cactus",
+        solid: true,
+        colider_size: (4.0, 8.0),
+        layer: Wall,
+    ),
+    Block(
+        name: "Sandstone Bricks",
+        id: 12,
+        texture_id: "sandstone_bricks",
+        solid: true,
+        colider_size: (8.0, 8.0),
+        layer: Wall,
+    ),
+    Block(
+        name: "Sandstone",
+        id: 13,
+        texture_id: "sandstone",
+        solid: false,
+        colider_size: (0.0, 0.0),
         layer: Floor,
     ),
 ]
