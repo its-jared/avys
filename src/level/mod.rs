@@ -2,8 +2,9 @@ use std::collections::HashMap;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use block::Block;
+use rand::Rng;
 
-use crate::config;
+use crate::{config, level::block::BlockType};
 
 pub mod build;
 pub mod block;
@@ -30,9 +31,9 @@ pub fn level_to_world_pos(lpos: IVec2, z: f32) -> Vec3 {
 
 #[derive(Resource)]
 pub struct Level {
-    pub floor_layer: HashMap<IVec2, (usize, Entity)>,
-    pub wall_layer: HashMap<IVec2, (usize, Entity)>,
-    pub block_registery: Vec<Block>,
+    pub floor_layer: HashMap<IVec2, (String, Entity)>,
+    pub wall_layer: HashMap<IVec2, (String, Entity)>,
+    pub block_registery: HashMap<String, Block>,
     pub biome_registery: Vec<Box<dyn biome::Biome>>,
 }
 
@@ -49,22 +50,30 @@ impl Level {
 
     pub fn set_block(
         &mut self, c: &mut Commands, a: &AssetServer,
-        pos: IVec2, id: usize
+        pos: IVec2, id: String
     ) {
-        if let Some(block) = self.block_registery.get(id) {
+        if let Some(block) = self.block_registery.get(&id) {
             let block_entity: Entity;
+            let texture_id: String;
+            
+            if block.random_texture {
+                let mut rng = rand::rng();
+                let r = rng.random_range(0..block.textures.len());
 
-            if !block.solid {
+                texture_id = block.textures.get(r).unwrap().clone();
+            } else { texture_id = block.textures.get(0).unwrap().clone(); }
+
+            if block.block_type != BlockType::Solid {
                 block_entity = c.spawn((
                     Transform::from_translation(level_to_world_pos(pos, 0.0))
                         .with_scale(Vec3::splat(4.0)),
-                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", block.texture_id))) 
+                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", texture_id))) 
                 )).id();
             } else {
                 block_entity = c.spawn((
                     Transform::from_translation(level_to_world_pos(pos, 0.0))
                         .with_scale(Vec3::splat(4.0)),
-                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", block.texture_id))),
+                    Sprite::from_image(a.load(format!("textures/blocks/{}.png", texture_id))),
                     Collider::cuboid(block.colider_size.0, block.colider_size.1)
                 )).id();
             }
@@ -112,16 +121,16 @@ impl Level {
 
     pub fn get_block(
         &self, pos: IVec2, layer: block::BlockLayer
-    ) -> Option<usize> {
+    ) -> Option<String> {
         match layer {
             block::BlockLayer::Floor => {
                 if self.floor_layer.contains_key(&pos) {
-                    return Some(self.floor_layer.get(&pos).unwrap().0);
+                    return Some(self.floor_layer.get(&pos).unwrap().0.clone());
                 }
             },
             block::BlockLayer::Wall => {
                 if self.wall_layer.contains_key(&pos) {
-                    return Some(self.wall_layer.get(&pos).unwrap().0);
+                    return Some(self.wall_layer.get(&pos).unwrap().0.clone());
                 }
             }
         }
@@ -155,7 +164,7 @@ impl Level {
             Sprite::from_color(color, vec2(16.0, 16.0)) 
         )).id();
 
-        self.floor_layer.insert(pos, (1, noise_block));
+        self.floor_layer.insert(pos, ("avys:dummy".to_string(), noise_block));
     }
 }
 

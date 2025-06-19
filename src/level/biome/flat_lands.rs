@@ -5,11 +5,11 @@ use super::*;
 pub struct FlatLands; 
 
 impl Biome for FlatLands {
-    fn get_floor(&self, _pos: IVec2, _seed: u32) -> usize {
-        1
+    fn get_floor(&self, _pos: IVec2, _seed: u32) -> String {
+        "avys:moss".to_string()
     }
 
-    fn get_wall(&self, _pos: IVec2, _seed: u32) -> Option<usize> {
+    fn get_wall(&self, _pos: IVec2, _seed: u32) -> Option<String> {
         None
     }
 }

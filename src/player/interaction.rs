@@ -3,12 +3,16 @@ use crate::{gui::hotbar::BlockIndicator, level};
 use super::*;
 
 #[derive(Resource)]
-pub struct ActiveItem(pub usize);
+pub struct ActiveItem(pub i32);
+
+#[derive(Resource)]
+pub struct Inventory(pub Vec<String>);
 
 pub fn handle_interaction(
     mut level: ResMut<level::Level>,
     mut c: Commands,
     a: Res<AssetServer>,
+    inventory: Res<Inventory>,
     active_item: Res<ActiveItem>,
     buttons: Res<ButtonInput<MouseButton>>,
     q_window: Query<&Window>,
@@ -24,16 +28,17 @@ pub fn handle_interaction(
         let mut block_indicator = q_block_indicator.single_mut().unwrap();
         let world_cursor_pos = camera.viewport_to_world_2d(camera_transform, cursor_pos).unwrap();
         let level_pos = level::world_to_level_pos(world_cursor_pos);
+        let active_item_id = inventory.0.get(active_item.0 as usize).unwrap();
 
         player_cursor.0.translation = level::level_to_world_pos(level_pos, 2.0);
-        block_indicator.image = a.load(format!("textures/blocks/{}.png", level.block_registery.get(active_item.0).unwrap().texture_id));
+        block_indicator.image = a.load(format!("textures/blocks/{}.png", level.block_registery.get(active_item_id).unwrap().textures.get(0).unwrap().clone()));
 
         if buttons.pressed(MouseButton::Left) {
             level.remove_block(&mut c, level_pos, level::block::BlockLayer::Wall);
         }
 
         if buttons.pressed(MouseButton::Right) {
-            level.set_block(&mut c, &a, level_pos, active_item.0);
+            level.set_block(&mut c, &a, level_pos, active_item_id.clone());
         }
     }
 }
@@ -43,9 +48,9 @@ pub fn change_selected_block(
     mut active_item: ResMut<ActiveItem>,
     mut evr_scroll: EventReader<MouseWheel>,
     buttons: Res<ButtonInput<KeyCode>>,
-    level: Res<level::Level>,
+    inventory: Res<Inventory>,
 ) {
-    let mut item = active_item.0 as i32;
+    let mut item = active_item.0;
 
     for ev in evr_scroll.read() {
         if ev.unit == MouseScrollUnit::Line { item += ev.y as i32; }
@@ -55,9 +60,9 @@ pub fn change_selected_block(
     if buttons.just_pressed(KeyCode::Minus) { item -= 1; }
 
     if item != 0 {
-        if item <= 0 { item = level.block_registery.len() as i32 - 1; }
-        if item >= level.block_registery.len() as i32 { item = 1; }
+        if item <= 0 { item = inventory.0.len() as i32 - 1; }
+        if item >= inventory.0.len() as i32 { item = 1; }
 
-        active_item.0 = item as usize;
+        active_item.0 = item;
     }
 }

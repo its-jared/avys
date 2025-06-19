@@ -1,6 +1,5 @@
 use bevy::prelude::*;
 use rand::prelude::*;
-use crate::{config, level::structure::{basalt_temple::BasaltTemple, Structure}};
 
 use super::*;
 
@@ -34,15 +33,5 @@ pub fn build_level(
                 level.set_block(&mut c, &a, pos, wall);
             }
         }
-    }
-
-    if config.experiments_enabled && config.experiments.structure_gen {
-        let pos_x = rng.random_range(0..LEVEL_SIZE - BasaltTemple::get_size().x);
-        let pos_y = rng.random_range(0..LEVEL_SIZE - BasaltTemple::get_size().y);
-        let offset = ivec2(pos_x, pos_y);
-
-        info!("Structure offset: {}", offset);
-
-        BasaltTemple::build(&mut c, &a, offset, &mut level);
     }
 }

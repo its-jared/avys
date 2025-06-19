@@ -7,7 +7,7 @@ use super::*;
 pub struct MossGardens; 
 
 impl Biome for MossGardens {
-    fn get_floor(&self, pos: IVec2, seed: u32) -> usize {
+    fn get_floor(&self, pos: IVec2, seed: u32) -> String {
         let perlin = Perlin::new(seed);
         let v = perlin.get([
             pos.x as f64 / 5.0,
@@ -15,12 +15,12 @@ impl Biome for MossGardens {
             0.2
         ]);
 
-        if v < -0.3 { return 7; }
+        if v < -0.3 { return "avys:dirt".to_string(); }
         
-        1
+        "avys:moss".to_string()
     }
 
-    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<usize> {
+    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<String> {
         let perlin = Perlin::new(seed);
         let mut rng = rand::rng();
 
@@ -33,10 +33,14 @@ impl Biome for MossGardens {
 
         if v >= 0.0 {
             if r < 5 {
-                return Some(5);
+                return Some("avys:rock".to_string());
             } else if r < 10 {
-                return Some(4);
+                return Some("avys:flowers".to_string());
             }
+        }
+
+        if v <= -0.2 {
+            return Some("avys:water".to_string());
         }
 
         None

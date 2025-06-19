@@ -34,8 +34,8 @@ pub fn get_biome_at_pos(pos: IVec2, seed: u32) -> Box<dyn Biome + 'static> {
 }
 
 pub trait Biome: 'static + BiomeClone + Sync + Send {
-    fn get_floor(&self, pos: IVec2, seed: u32) -> usize;
-    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<usize>;
+    fn get_floor(&self, pos: IVec2, seed: u32) -> String;
+    fn get_wall(&self, pos: IVec2, seed: u32) -> Option<String>;
 }
 
 pub trait BiomeClone {

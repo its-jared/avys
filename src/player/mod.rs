@@ -1,6 +1,6 @@
 use bevy::{core_pipeline::{bloom::Bloom, tonemapping::{DebandDither, Tonemapping}}, prelude::*};
 use bevy_rapier2d::prelude::*;
-use crate::{level, rotate_to_cursor::RotateToCursor};
+use crate::{level, player::interaction::{ActiveItem, Inventory}, rotate_to_cursor::RotateToCursor};
 
 pub mod movement;
 pub mod interaction;
@@ -16,13 +16,15 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app
-            .insert_resource(interaction::ActiveItem(3))
+            .insert_resource(ActiveItem(3))
             .add_systems(Startup, setup)
+            .add_systems(Startup, populate_inventory
+                .run_if(resource_exists::<level::Level>))
             .add_systems(Update, movement::handle_movement)
             .add_systems(Update, (
                 interaction::handle_interaction,
                 interaction::change_selected_block                    
-            ).run_if(resource_exists::<level::Level>));
+            ).run_if(resource_exists::<Inventory>));
     }
 }
 
@@ -81,4 +83,16 @@ fn setup(
             ..default()
         }
     ));
+}
+
+fn populate_inventory(mut c: Commands, level: Res<level::Level>) {
+    let mut inventory_vec: Vec<String> = Vec::new();
+    let mut i = 0;
+
+    for block in level.block_registery.iter() {
+        inventory_vec.insert(i, block.0.clone());
+        i += 1;
+    }
+
+    c.insert_resource(Inventory(inventory_vec));
 }
