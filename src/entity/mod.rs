@@ -14,6 +14,7 @@ impl Plugin for EntityPlugin {
                 Update,
                 (
                     movement::handle_movement,
+                    dash::on_dash_start,
                     dash::handle_dash,
             ));
     }

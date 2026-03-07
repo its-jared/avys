@@ -62,6 +62,7 @@ pub fn spawn_player(
         DashStats {
             speed_modifier: 4.0,
             dash_timer: Timer::from_seconds(0.3, TimerMode::Repeating),
+            dash_direction: Vec3::ZERO,
         },
     ));
 }

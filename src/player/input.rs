@@ -15,7 +15,7 @@ pub fn handle_input(
         if keys.pressed(KeyCode::KeyD) { dir += Vec3::X; }
         if keys.pressed(KeyCode::KeyA) { dir -= Vec3::X; }
 
-        if keys.pressed(KeyCode::KeyQ) {
+        if keys.just_pressed(KeyCode::KeyQ) {
             c.entity(entity).insert(Dashing);
         }
 

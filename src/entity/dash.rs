@@ -9,12 +9,22 @@ use crate::{animation::AnimationTimer, entity::movement::MovementStats};
 pub struct DashStats {
     pub speed_modifier: f32,
     pub dash_timer: Timer,
+    pub dash_direction: Vec3,
 }
 
 // Handle that is added when an
 // entity wants to dash.
 #[derive(Component)]
 pub struct Dashing;
+
+pub fn on_dash_start(
+    mut q: Query<(&MovementStats, &mut DashStats), Added<Dashing>>,
+) {
+    for (movement_stats, mut dash_stats) in q.iter_mut() {
+        dash_stats.dash_timer.reset();
+        dash_stats.dash_direction = movement_stats.direction;
+    }
+}
 
 pub fn handle_dash(
     mut c: Commands,
@@ -27,19 +37,15 @@ pub fn handle_dash(
 
         if dash_stats.dash_timer.just_finished() {
             c.entity(entity).remove::<Dashing>();
+            dash_stats.dash_direction = Vec3::ZERO;
         }
 
-        if movement_stats.direction != Vec3::ZERO {
+        if dash_stats.dash_direction != Vec3::ZERO {
             animation_timer.0.unpause();
-
-            let speed = if !dash_stats.dash_timer.is_finished() {
-                movement_stats.speed * dash_stats.speed_modifier
-            } else {
-                movement_stats.speed
-            };
+            let speed = movement_stats.speed * dash_stats.speed_modifier;
 
             transform.translation += 
-                movement_stats.direction * delta * speed;
+                dash_stats.dash_direction * delta * speed;
         } else { animation_timer.0.pause(); }
     }
 }
