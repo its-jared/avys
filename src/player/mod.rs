@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{animation::*, entity::movement::MovementStats};
+use crate::{animation::*, entity::{dash::DashStats, movement::MovementStats}};
 
 pub mod input;
 
@@ -58,6 +58,10 @@ pub fn spawn_player(
             speed: 100.0,
             stamina_usage: 1,
             direction: Vec3::ZERO,
+        },
+        DashStats {
+            speed_modifier: 4.0,
+            dash_timer: Timer::from_seconds(0.3, TimerMode::Repeating),
         },
     ));
 }

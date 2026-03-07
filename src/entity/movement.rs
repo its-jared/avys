@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::animation::AnimationTimer;
+use crate::{animation::AnimationTimer, entity::dash::Dashing};
 
 #[derive(Component)]
 pub struct MovementStats {
@@ -11,7 +11,7 @@ pub struct MovementStats {
 
 pub fn handle_movement(
     time: Res<Time>,
-    mut q: Query<(&mut Transform, &mut AnimationTimer, &MovementStats)>,
+    mut q: Query<(&mut Transform, &mut AnimationTimer, &MovementStats), Without<Dashing>>,
 ) {
     for (mut transform, mut animation_timer, movement_stats) in q.iter_mut() {
         let delta = time.delta_secs();

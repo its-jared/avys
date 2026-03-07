@@ -1,18 +1,23 @@
 use bevy::prelude::*;
 
-use crate::{entity::movement::MovementStats, player::Player};
+use crate::{entity::{dash::Dashing, movement::MovementStats}, player::Player};
 
 pub fn handle_input(
+    mut c: Commands,
     keys: Res<ButtonInput<KeyCode>>,
-    mut q: Query<&mut MovementStats, With<Player>>,
+    mut q: Query<(Entity, &mut MovementStats), With<Player>>,
 ) {
-    for mut movement_stats in q.iter_mut() {
+    for (entity, mut movement_stats) in q.iter_mut() {
         let mut dir = Vec3::ZERO;
 
-        if keys.pressed(KeyCode::ArrowUp)    { dir += Vec3::Y; }
-        if keys.pressed(KeyCode::ArrowDown)  { dir -= Vec3::Y; }
-        if keys.pressed(KeyCode::ArrowRight) { dir += Vec3::X; }
-        if keys.pressed(KeyCode::ArrowLeft)  { dir -= Vec3::X; }
+        if keys.pressed(KeyCode::KeyW) { dir += Vec3::Y; }
+        if keys.pressed(KeyCode::KeyS) { dir -= Vec3::Y; }
+        if keys.pressed(KeyCode::KeyD) { dir += Vec3::X; }
+        if keys.pressed(KeyCode::KeyA) { dir -= Vec3::X; }
+
+        if keys.pressed(KeyCode::KeyQ) {
+            c.entity(entity).insert(Dashing);
+        }
 
         movement_stats.direction = dir;
     }
