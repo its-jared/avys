@@ -16,6 +16,6 @@ impl Plugin for EntityPlugin {
                     movement::handle_movement,
                     dash::on_dash_start,
                     dash::handle_dash,
-            ));
+            ).chain());
     }
 }

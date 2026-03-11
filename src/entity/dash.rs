@@ -22,7 +22,11 @@ pub fn on_dash_start(
 ) {
     for (movement_stats, mut dash_stats) in q.iter_mut() {
         dash_stats.dash_timer.reset();
-        dash_stats.dash_direction = movement_stats.direction;
+        dash_stats.dash_direction = if movement_stats.direction == Vec3::ZERO {
+            movement_stats.previous_direction
+        } else {
+            movement_stats.direction
+        };
     }
 }
 
@@ -42,7 +46,7 @@ pub fn handle_dash(
 
         if dash_stats.dash_direction != Vec3::ZERO {
             animation_timer.0.unpause();
-            let speed = movement_stats.speed * dash_stats.speed_modifier;
+            let speed = movement_stats.running_speed * dash_stats.speed_modifier;
 
             transform.translation += 
                 dash_stats.dash_direction * delta * speed;

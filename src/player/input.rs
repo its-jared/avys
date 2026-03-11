@@ -15,6 +15,16 @@ pub fn handle_input(
         if keys.pressed(KeyCode::KeyD) { dir += Vec3::X; }
         if keys.pressed(KeyCode::KeyA) { dir -= Vec3::X; }
 
+        if keys.pressed(KeyCode::ShiftLeft) 
+        || keys.pressed(KeyCode::ShiftRight) { 
+            movement_stats.is_running = true;
+        }
+
+        if keys.just_released(KeyCode::ShiftLeft) 
+        || keys.just_released(KeyCode::ShiftRight) { 
+            movement_stats.is_running = false;
+        }
+
         if keys.just_pressed(KeyCode::KeyQ) {
             c.entity(entity).insert(Dashing);
         }

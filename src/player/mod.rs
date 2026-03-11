@@ -42,7 +42,11 @@ pub fn spawn_player(
         Health(100),
         Stamina(100),
 
-        Transform::from_scale(Vec3::splat(2.0)),
+        Transform {
+            translation: vec3(0.0, 0.0, 1.0),
+            scale: Vec3::splat(3.0),
+            ..default()
+        },
 
         Sprite::from_atlas_image(
             texture,
@@ -55,13 +59,16 @@ pub fn spawn_player(
         AnimationTimer(Timer::from_seconds(0.35, TimerMode::Repeating)),
 
         MovementStats {
-            speed: 100.0,
+            walking_speed: 150.0,
+            running_speed: 300.0,
             stamina_usage: 1,
             direction: Vec3::ZERO,
+            previous_direction: Vec3::ZERO,
+            is_running: false,
         },
         DashStats {
             speed_modifier: 4.0,
-            dash_timer: Timer::from_seconds(0.3, TimerMode::Repeating),
+            dash_timer: Timer::from_seconds(0.1c, TimerMode::Repeating),
             dash_direction: Vec3::ZERO,
         },
     ));
