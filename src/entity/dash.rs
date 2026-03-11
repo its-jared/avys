@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{animation::AnimationTimer, entity::movement::MovementStats};
+use crate::{animation::AnimationTimer, entity::{Stamina, movement::MovementStats}};
 
 // speed_modifier is multiplied
 // into movement speed found in
@@ -33,18 +33,20 @@ pub fn on_dash_start(
 pub fn handle_dash(
     mut c: Commands,
     time: Res<Time>,
-    mut q: Query<(Entity, &MovementStats, &mut DashStats, &mut AnimationTimer, &mut Transform), With<Dashing>>,
+    mut q: Query<(Entity, &MovementStats, &mut DashStats, &mut AnimationTimer, &mut Transform, &mut Stamina), With<Dashing>>,
 ) {
-    for (entity, movement_stats, mut dash_stats, mut animation_timer, mut transform) in q.iter_mut() {
+    for (entity, movement_stats, mut dash_stats, mut animation_timer, mut transform, mut stamina) in q.iter_mut() {
         let delta = time.delta_secs();
         dash_stats.dash_timer.tick(time.delta());
 
         if dash_stats.dash_timer.just_finished() {
             c.entity(entity).remove::<Dashing>();
             dash_stats.dash_direction = Vec3::ZERO;
+
+            if (stamina.value - 5) > 0 { stamina.value -= 5; }
         }
 
-        if dash_stats.dash_direction != Vec3::ZERO {
+        if dash_stats.dash_direction != Vec3::ZERO && (stamina.value - 5) > 0 {
             animation_timer.0.unpause();
             let speed = movement_stats.running_speed * dash_stats.speed_modifier;
 

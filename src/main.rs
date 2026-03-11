@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 pub mod entity;
 pub mod player;
+pub mod ui;
 pub mod animation;
 
 fn main() {
@@ -22,6 +23,7 @@ fn main() {
             player::PlayerPlugin,
             animation::AnimationPlugin,
             entity::EntityPlugin,
+            ui::UIPlugin,
         ))
         .run();
 }

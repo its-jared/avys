@@ -1,17 +1,11 @@
 use bevy::prelude::*;
 
-use crate::{animation::*, entity::{dash::DashStats, movement::MovementStats}};
+use crate::{animation::*, entity::{Health, Stamina, dash::DashStats, movement::MovementStats}};
 
 pub mod input;
 
 #[derive(Component)]
 pub struct Player;
-
-#[derive(Component)]
-pub struct Health(pub i32);
-
-#[derive(Component)]
-pub struct Stamina(pub i32);
 
 pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -39,8 +33,16 @@ pub fn spawn_player(
 
     c.spawn((
         Player,
-        Health(100),
-        Stamina(100),
+        Health {
+            value: 50,
+            max: 50,
+            regen_timer: Timer::from_seconds(1.5, TimerMode::Repeating),
+        },
+        Stamina {
+            value: 25,
+            max: 25,
+            regen_timer: Timer::from_seconds(1.0c, TimerMode::Repeating),
+        },
 
         Transform {
             translation: vec3(0.0, 0.0, 1.0),
@@ -61,7 +63,7 @@ pub fn spawn_player(
         MovementStats {
             walking_speed: 150.0,
             running_speed: 300.0,
-            stamina_usage: 1,
+            running_stamina_timer: Timer::from_seconds(0.5, TimerMode::Repeating),
             direction: Vec3::ZERO,
             previous_direction: Vec3::ZERO,
             is_running: false,
