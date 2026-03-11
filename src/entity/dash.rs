@@ -43,10 +43,10 @@ pub fn handle_dash(
             c.entity(entity).remove::<Dashing>();
             dash_stats.dash_direction = Vec3::ZERO;
 
-            if (stamina.value - 5) > 0 { stamina.value -= 5; }
+            stamina.difference -= 5;
         }
 
-        if dash_stats.dash_direction != Vec3::ZERO && (stamina.value - 5) > 0 {
+        if dash_stats.dash_direction != Vec3::ZERO {
             animation_timer.0.unpause();
             let speed = movement_stats.running_speed * dash_stats.speed_modifier;
 

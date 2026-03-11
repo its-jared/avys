@@ -34,12 +34,12 @@ pub fn handle_movement(
                 else { 0.0 };
             
             let speed = 
-                if movement_stats.is_running && stamina.value > 0 { 
+                if movement_stats.is_running { 
                     movement_stats.running_stamina_timer.tick(time.delta());
 
                     if movement_stats.running_stamina_timer.just_finished() {
                         movement_stats.running_stamina_timer.reset();
-                        stamina.value -= 1;
+                        stamina.difference -= 1;
                     }
 
                     movement_stats.running_speed

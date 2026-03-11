@@ -37,11 +37,13 @@ pub fn spawn_player(
             value: 50,
             max: 50,
             regen_timer: Timer::from_seconds(1.5, TimerMode::Repeating),
+            difference: 0,
         },
         Stamina {
             value: 25,
             max: 25,
-            regen_timer: Timer::from_seconds(1.0c, TimerMode::Repeating),
+            regen_timer: Timer::from_seconds(1.0, TimerMode::Repeating),
+            difference: 0,
         },
 
         Transform {
