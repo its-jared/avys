@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{animation::AnimationTimer, entity::{Stamina, movement::MovementStats}};
+use crate::{animation::AnimationTimer, entity::{DASH_STAMINA_USAGE, Stamina, movement::MovementStats}};
 
 // speed_modifier is multiplied
 // into movement speed found in
@@ -37,16 +37,17 @@ pub fn handle_dash(
 ) {
     for (entity, movement_stats, mut dash_stats, mut animation_timer, mut transform, mut stamina) in q.iter_mut() {
         let delta = time.delta_secs();
+        let future_stamina = stamina.value - DASH_STAMINA_USAGE;
         dash_stats.dash_timer.tick(time.delta());
 
         if dash_stats.dash_timer.just_finished() {
             c.entity(entity).remove::<Dashing>();
             dash_stats.dash_direction = Vec3::ZERO;
 
-            stamina.difference -= 5;
+            if future_stamina >= 0 { stamina.difference -= DASH_STAMINA_USAGE; }
         }
 
-        if dash_stats.dash_direction != Vec3::ZERO {
+        if dash_stats.dash_direction != Vec3::ZERO && future_stamina >= 0 {
             animation_timer.0.unpause();
             let speed = movement_stats.running_speed * dash_stats.speed_modifier;
 

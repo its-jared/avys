@@ -34,15 +34,15 @@ pub fn spawn_player(
     c.spawn((
         Player,
         Health {
-            value: 50,
+            value: 25,
             max: 50,
-            regen_timer: Timer::from_seconds(1.5, TimerMode::Repeating),
+            regen_timer: Timer::from_seconds(2.5, TimerMode::Repeating),
             difference: 0,
         },
         Stamina {
             value: 25,
             max: 25,
-            regen_timer: Timer::from_seconds(1.0, TimerMode::Repeating),
+            regen_timer: Timer::from_seconds(2.0, TimerMode::Repeating),
             difference: 0,
         },
 

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{animation::AnimationTimer, entity::{Stamina, dash::Dashing}};
+use crate::{animation::AnimationTimer, entity::{RUN_STAMINA_USAGE, Stamina, dash::Dashing}};
 
 #[derive(Component)]
 pub struct MovementStats {
@@ -39,7 +39,7 @@ pub fn handle_movement(
 
                     if movement_stats.running_stamina_timer.just_finished() {
                         movement_stats.running_stamina_timer.reset();
-                        stamina.difference -= 1;
+                        stamina.difference -= RUN_STAMINA_USAGE;
                     }
 
                     movement_stats.running_speed
