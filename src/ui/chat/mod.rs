@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::ui::chat::message::ChatLog;
+use crate::ui::{FONT_SIZE, REGULAR_FONT, chat::message::ChatLog};
 
 pub mod message;
 
@@ -84,6 +84,7 @@ pub fn setup_chat_ui(mut commands: Commands) {
 
 pub fn render_chat(
     mut commands: Commands,
+    a: Res<AssetServer>,
     chat: Res<ChatLog>,
     container_query: Query<Entity, With<ChatContainer>>,
 ) {
@@ -100,7 +101,8 @@ pub fn render_chat(
                 Text::new(msg.text.clone()),
                 TextColor(color),
                 TextFont {
-                    font_size: 15.0,
+                    font_size: FONT_SIZE,
+                    font: a.load(format!("fonts/{}", REGULAR_FONT)),
                     ..default()
                 },
             ));

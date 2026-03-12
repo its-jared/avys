@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{entity::{Health, Stamina}, player::Player};
+use crate::{entity::{Health, Stamina}, player::Player, ui::{FONT_SIZE, REGULAR_FONT}};
 
 #[derive(Component)]
 pub struct HUD;
@@ -13,9 +13,12 @@ pub struct StaminaBar;
 
 pub fn build_hud(
     mut c: Commands,
+    a: Res<AssetServer>,
 ) {
     c.spawn(
     Node {
+        top: Val::Px(20.0),
+        left: Val::Px(20.0),
         width: percent(100),
         height: percent(100),
         flex_direction: FlexDirection::Column,
@@ -27,7 +30,8 @@ pub fn build_hud(
 
             Text::new("Health will go here."),
             TextFont {
-                font_size: 12.0,
+                font_size: FONT_SIZE,
+                font: a.load(format!("fonts/{}", REGULAR_FONT)),
                 ..default()
             },
         ));
@@ -37,7 +41,8 @@ pub fn build_hud(
 
             Text::new("Stamina will go here."),
             TextFont {
-                font_size: 12.0,
+                font_size: FONT_SIZE,
+                font: a.load(format!("fonts/{}", REGULAR_FONT)),
                 ..default()
             },
         ));
