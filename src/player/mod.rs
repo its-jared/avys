@@ -34,7 +34,7 @@ pub fn spawn_player(
     c.spawn((
         Player,
         Health {
-            value: 25,
+            value: 50,
             max: 50,
             regen_timer: Timer::from_seconds(2.5, TimerMode::Repeating),
             difference: 0,

@@ -4,14 +4,18 @@ pub mod entity;
 pub mod player;
 pub mod ui;
 pub mod animation;
+pub mod splash_text;
 
 fn main() {
+    let splash = splash_text::get_splash_text()
+        .expect("Error when getting splash text!");
+    
     App::new()
         .add_plugins(
             DefaultPlugins
                 .set(WindowPlugin {
                     primary_window: Some(Window {
-                        title: "Avys".to_string(),
+                        title: format!("Avys - {}", splash).to_string(),
                         ..default()
                     }),
                     ..default()
