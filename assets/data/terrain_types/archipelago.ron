@@ -1,0 +1,13 @@
+#![enable(implicit_some)]
+TerrainType(
+    name: "Archipelago",
+    description: "Vast landscape full of water and islands.",
+
+    size: (64, 64),
+    noise_scale: 0.05,
+    height_scale: 4.0,
+
+    has_water: true, 
+    water_color: (0.13, 0.54, 0.98, 0.5),
+    water_height: 30.0,
+)

@@ -1,0 +1,11 @@
+#![enable(implicit_some)]
+TerrainType(
+    name: "Wastelands",
+    description: "Desolate and devoid of life.",
+
+    size: (64, 64),
+    noise_scale: 0.2,
+    height_scale: 2.0,
+
+    has_water: false, 
+)

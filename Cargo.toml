@@ -1,0 +1,15 @@
+[package]
+name = "avys"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bevy = "0.18.1"
+bevy_panorbit_camera = "0.34.0"
+bevy_shader = "0.18.1"
+noise = "0.9.0"
+rand = "0.10.0"
+ron = "0.12.1"
+serde = "1.0.228"
+text_io = "0.1.13"
+walkdir = "2.5.0"

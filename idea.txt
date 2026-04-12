@@ -1,0 +1,5 @@
+Different world types.
+Plant and regrow a world. 
+Simulation
+
+Orthographic camera that can only zoom and rotate around the world.
